@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="atom.xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://docs.llamafarm.dev/blog</id>
+    <title>LlamaFarm Blog</title>
+    <updated>2025-02-01T00:00:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://docs.llamafarm.dev/blog"/>
+    <subtitle>LlamaFarm Blog</subtitle>
+    <icon>https://docs.llamafarm.dev/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Making AI Easier for Everyone - No PhD Required]]></title>
+        <id>https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone</id>
+        <link href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone"/>
+        <updated>2025-02-01T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[The AI revolution promises to transform every industry, but there's a problem: it's still too hard to use. Let's fix that.]]></summary>
+        <content type="html"><![CDATA[<p>The AI revolution promises to transform every industry, but there's a problem: it's still too hard to use. Let's fix that.</p>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="the-current-state-of-ai-accessibility">The Current State of AI Accessibility<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#the-current-state-of-ai-accessibility" class="hash-link" aria-label="Direct link to The Current State of AI Accessibility" title="Direct link to The Current State of AI Accessibility">​</a></h2>
+<p>Despite incredible advances in AI capabilities, adoption remains limited by complexity:</p>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="the-technical-barriers">The Technical Barriers<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#the-technical-barriers" class="hash-link" aria-label="Direct link to The Technical Barriers" title="Direct link to The Technical Barriers">​</a></h3>
+<ul>
+<li><strong>Environment Setup</strong>: CUDA drivers, Python versions, dependency conflicts</li>
+<li><strong>Model Selection</strong>: Which model? What size? What quantization?</li>
+<li><strong>Resource Management</strong>: GPU memory, batch sizes, optimization</li>
+<li><strong>Deployment</strong>: Scaling, load balancing, monitoring</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="the-knowledge-gap">The Knowledge Gap<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#the-knowledge-gap" class="hash-link" aria-label="Direct link to The Knowledge Gap" title="Direct link to The Knowledge Gap">​</a></h3>
+<p>Most developers know their domain but not:</p>
+<ul>
+<li>Transformer architectures</li>
+<li>Prompt engineering best practices</li>
+<li>Model fine-tuning techniques</li>
+<li>ML operations (MLOps)</li>
+</ul>
+<p>This gap keeps AI out of reach for many who could benefit most.</p>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="who-gets-left-behind">Who Gets Left Behind?<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#who-gets-left-behind" class="hash-link" aria-label="Direct link to Who Gets Left Behind?" title="Direct link to Who Gets Left Behind?">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="small-businesses">Small Businesses<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#small-businesses" class="hash-link" aria-label="Direct link to Small Businesses" title="Direct link to Small Businesses">​</a></h3>
+<p>"We'd love to use AI for customer support, but we can't afford a data science team."</p>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="healthcare-providers">Healthcare Providers<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#healthcare-providers" class="hash-link" aria-label="Direct link to Healthcare Providers" title="Direct link to Healthcare Providers">​</a></h3>
+<p>"We need to analyze patient data locally for privacy, but the setup is too complex."</p>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="educational-institutions">Educational Institutions<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#educational-institutions" class="hash-link" aria-label="Direct link to Educational Institutions" title="Direct link to Educational Institutions">​</a></h3>
+<p>"Our students want to experiment with AI, but the infrastructure requirements are daunting."</p>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="individual-developers">Individual Developers<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#individual-developers" class="hash-link" aria-label="Direct link to Individual Developers" title="Direct link to Individual Developers">​</a></h3>
+<p>"I just want to add AI to my app without learning PyTorch."</p>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="the-simplicity-revolution">The Simplicity Revolution<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#the-simplicity-revolution" class="hash-link" aria-label="Direct link to The Simplicity Revolution" title="Direct link to The Simplicity Revolution">​</a></h2>
+<p>Other technical revolutions succeeded by hiding complexity:</p>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="the-web">The Web<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#the-web" class="hash-link" aria-label="Direct link to The Web" title="Direct link to The Web">​</a></h3>
+<ul>
+<li><strong>Then</strong>: Manual HTTP, HTML, server configuration</li>
+<li><strong>Now</strong>: <code>create-react-app</code>, one-click deploys</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="mobile-apps">Mobile Apps<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#mobile-apps" class="hash-link" aria-label="Direct link to Mobile Apps" title="Direct link to Mobile Apps">​</a></h3>
+<ul>
+<li><strong>Then</strong>: Manual memory management, device-specific code</li>
+<li><strong>Now</strong>: Flutter, React Native, drag-and-drop builders</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="cloud-computing">Cloud Computing<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#cloud-computing" class="hash-link" aria-label="Direct link to Cloud Computing" title="Direct link to Cloud Computing">​</a></h3>
+<ul>
+<li><strong>Then</strong>: Rack servers, network configuration, load balancers</li>
+<li><strong>Now</strong>: <code>git push heroku main</code></li>
+</ul>
+<p>AI needs the same transformation.</p>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="making-ai-approachable">Making AI Approachable<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#making-ai-approachable" class="hash-link" aria-label="Direct link to Making AI Approachable" title="Direct link to Making AI Approachable">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="1-configuration-over-code">1. <strong>Configuration Over Code</strong><a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#1-configuration-over-code" class="hash-link" aria-label="Direct link to 1-configuration-over-code" title="Direct link to 1-configuration-over-code">​</a></h3>
+<p>Instead of:</p>
+<div class="language-python codeBlockContainer_aalF theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_N_DF"><pre tabindex="0" class="prism-code language-python codeBlock_zHgq thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_RjmQ"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> torch</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">from</span><span class="token plain"> transformers </span><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> AutoModel</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> AutoTokenizer</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">model </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> AutoModel</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">from_pretrained</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">"meta-llama/Llama-2-7b"</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">tokenizer </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> AutoTokenizer</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">from_pretrained</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">"meta-llama/Llama-2-7b"</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">model</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">to</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">'cuda'</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># ... 50 more lines of setup</span><br></span></code></pre></div></div>
+<p>Just write:</p>
+<div class="language-yaml codeBlockContainer_aalF theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_N_DF"><pre tabindex="0" class="prism-code language-yaml codeBlock_zHgq thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_RjmQ"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">model</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> llama2</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">7b</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">device</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> auto</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="2-sensible-defaults">2. <strong>Sensible Defaults</strong><a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#2-sensible-defaults" class="hash-link" aria-label="Direct link to 2-sensible-defaults" title="Direct link to 2-sensible-defaults">​</a></h3>
+<ul>
+<li>Automatic device selection (CPU/GPU)</li>
+<li>Smart batching and memory management</li>
+<li>Built-in optimization for common use cases</li>
+<li>Fallback strategies</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="3-progressive-disclosure">3. <strong>Progressive Disclosure</strong><a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#3-progressive-disclosure" class="hash-link" aria-label="Direct link to 3-progressive-disclosure" title="Direct link to 3-progressive-disclosure">​</a></h3>
+<p>Start simple:</p>
+<div class="language-yaml codeBlockContainer_aalF theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_N_DF"><pre tabindex="0" class="prism-code language-yaml codeBlock_zHgq thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_RjmQ"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">model</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> llama2</span><br></span></code></pre></div></div>
+<p>Add complexity only when needed:</p>
+<div class="language-yaml codeBlockContainer_aalF theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_N_DF"><pre tabindex="0" class="prism-code language-yaml codeBlock_zHgq thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_RjmQ"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">model</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> llama2</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">quantization</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> 4bit</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">context_length</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">8192</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">gpu_layers</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">35</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="4-visual-tools">4. <strong>Visual Tools</strong><a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#4-visual-tools" class="hash-link" aria-label="Direct link to 4-visual-tools" title="Direct link to 4-visual-tools">​</a></h3>
+<p>Not everyone thinks in YAML:</p>
+<ul>
+<li>Web UI for configuration</li>
+<li>Visual pipeline builders</li>
+<li>Real-time preview</li>
+<li>One-click templates</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="real-examples">Real Examples<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#real-examples" class="hash-link" aria-label="Direct link to Real Examples" title="Direct link to Real Examples">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="for-the-restaurant-owner">For the Restaurant Owner<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#for-the-restaurant-owner" class="hash-link" aria-label="Direct link to For the Restaurant Owner" title="Direct link to For the Restaurant Owner">​</a></h3>
+<p>"I want to analyze customer reviews"</p>
+<div class="language-yaml codeBlockContainer_aalF theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_N_DF"><pre tabindex="0" class="prism-code language-yaml codeBlock_zHgq thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_RjmQ"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">task</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> sentiment</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">analysis</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">input</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> reviews.csv</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">output</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> insights.json</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="for-the-teacher">For the Teacher<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#for-the-teacher" class="hash-link" aria-label="Direct link to For the Teacher" title="Direct link to For the Teacher">​</a></h3>
+<p>"Help my students practice language"</p>
+<div class="language-yaml codeBlockContainer_aalF theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_N_DF"><pre tabindex="0" class="prism-code language-yaml codeBlock_zHgq thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_RjmQ"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">chatbot</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">personality</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> friendly</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">tutor</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">language</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> spanish</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">level</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> beginner</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="for-the-doctor">For the Doctor<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#for-the-doctor" class="hash-link" aria-label="Direct link to For the Doctor" title="Direct link to For the Doctor">​</a></h3>
+<p>"Summarize patient histories securely"</p>
+<div class="language-yaml codeBlockContainer_aalF theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_N_DF"><pre tabindex="0" class="prism-code language-yaml codeBlock_zHgq thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_RjmQ"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">summarizer</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">model</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> medical</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">llama</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">local_only</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token boolean important" style="color:#36acaa">true</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">compliance</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> hipaa</span><br></span></code></pre></div></div>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="the-path-forward">The Path Forward<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#the-path-forward" class="hash-link" aria-label="Direct link to The Path Forward" title="Direct link to The Path Forward">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="step-1-remove-prerequisites">Step 1: Remove Prerequisites<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#step-1-remove-prerequisites" class="hash-link" aria-label="Direct link to Step 1: Remove Prerequisites" title="Direct link to Step 1: Remove Prerequisites">​</a></h3>
+<p>No more "First, install CUDA 11.8, then..."</p>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="step-2-provide-templates">Step 2: Provide Templates<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#step-2-provide-templates" class="hash-link" aria-label="Direct link to Step 2: Provide Templates" title="Direct link to Step 2: Provide Templates">​</a></h3>
+<p>Start from working examples, not blank files</p>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="step-3-progressive-learning">Step 3: Progressive Learning<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#step-3-progressive-learning" class="hash-link" aria-label="Direct link to Step 3: Progressive Learning" title="Direct link to Step 3: Progressive Learning">​</a></h3>
+<p>Learn AI concepts through usage, not textbooks</p>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="step-4-community-support">Step 4: Community Support<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#step-4-community-support" class="hash-link" aria-label="Direct link to Step 4: Community Support" title="Direct link to Step 4: Community Support">​</a></h3>
+<p>Forums, Discord, and Stack Overflow for AI builders</p>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="beyond-configuration">Beyond Configuration<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#beyond-configuration" class="hash-link" aria-label="Direct link to Beyond Configuration" title="Direct link to Beyond Configuration">​</a></h2>
+<p>The next evolution:</p>
+<ul>
+<li><strong>Natural language configuration</strong>: "I need a chatbot that helps with math homework"</li>
+<li><strong>Auto-optimization</strong>: Let the system choose the best model and settings</li>
+<li><strong>No-code builders</strong>: Drag and drop AI pipelines</li>
+<li><strong>Marketplace</strong>: Share and monetize AI configurations</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="the-democratization-effect">The Democratization Effect<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#the-democratization-effect" class="hash-link" aria-label="Direct link to The Democratization Effect" title="Direct link to The Democratization Effect">​</a></h2>
+<p>When AI becomes truly accessible:</p>
+<ul>
+<li><strong>Every business</strong> can have AI-powered customer service</li>
+<li><strong>Every developer</strong> can add AI features</li>
+<li><strong>Every student</strong> can experiment and learn</li>
+<li><strong>Every community</strong> can build tools for their needs</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="call-to-action">Call to Action<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#call-to-action" class="hash-link" aria-label="Direct link to Call to Action" title="Direct link to Call to Action">​</a></h2>
+<p>The future of AI isn't in the hands of a few tech giants. It belongs to:</p>
+<ul>
+<li>The developer in Nigeria building for local needs</li>
+<li>The teacher in Brazil creating educational tools</li>
+<li>The doctor in rural India improving healthcare</li>
+<li>You, solving problems in your community</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="join-the-movement">Join the Movement<a href="https://docs.llamafarm.dev/blog/making-ai-easier-for-everyone#join-the-movement" class="hash-link" aria-label="Direct link to Join the Movement" title="Direct link to Join the Movement">​</a></h2>
+<p>We're not just building tools; we're building a movement. A movement that says:</p>
+<ul>
+<li>AI should be accessible</li>
+<li>Privacy should be default</li>
+<li>Local-first should be easy</li>
+<li>Everyone should be able to participate</li>
+</ul>
+<p>The AI revolution is here. Let's make sure everyone's invited.</p>
+<hr>
+<p><em>How could easier AI tools help you? What would you build if AI was as simple as writing a config file? Share your ideas below or join our <a href="https://discord.gg/llamafarm" target="_blank" rel="noopener noreferrer">Discord community</a>.</em></p>]]></content>
+        <author>
+            <name>LlamaFarm Team</name>
+            <uri>https://github.com/llama-farm/llamafarm</uri>
+        </author>
+        <category label="AI" term="AI"/>
+        <category label="Accessibility" term="Accessibility"/>
+        <category label="Developers" term="Developers"/>
+        <category label="No Code" term="No Code"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Introducing LlamaFarm - Config-Based AI for Everyone]]></title>
+        <id>https://docs.llamafarm.dev/blog/introducing-llamafarm</id>
+        <link href="https://docs.llamafarm.dev/blog/introducing-llamafarm"/>
+        <updated>2025-01-22T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Today, we're excited to announce LlamaFarm - an open-source framework that makes deploying AI as simple as writing a YAML file. Run any model, anywhere, with just configuration.]]></summary>
+        <content type="html"><![CDATA[<p>Today, we're excited to announce LlamaFarm - an open-source framework that makes deploying AI as simple as writing a YAML file. Run any model, anywhere, with just configuration.</p>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="the-vision">The Vision<a href="https://docs.llamafarm.dev/blog/introducing-llamafarm#the-vision" class="hash-link" aria-label="Direct link to The Vision" title="Direct link to The Vision">​</a></h2>
+<p>Remember when deploying a web app meant manually configuring servers, installing dependencies, and writing deployment scripts? Then came tools like Docker and Kubernetes that changed everything with declarative configuration.</p>
+<p>We're bringing that same revolution to AI.</p>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="what-is-llamafarm">What is LlamaFarm?<a href="https://docs.llamafarm.dev/blog/introducing-llamafarm#what-is-llamafarm" class="hash-link" aria-label="Direct link to What is LlamaFarm?" title="Direct link to What is LlamaFarm?">​</a></h2>
+<p>LlamaFarm is a configuration-based AI deployment framework that lets you:</p>
+<ul>
+<li>🏠 <strong>Run models locally</strong> on your hardware</li>
+<li>☁️ <strong>Deploy to any cloud</strong> (AWS, Azure, GCP, or your own)</li>
+<li>🔄 <strong>Switch models instantly</strong> with config changes</li>
+<li>🛡️ <strong>Keep data private</strong> with local-first processing</li>
+<li>📊 <strong>Scale seamlessly</strong> from laptop to cluster</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="simple-as-yaml">Simple as YAML<a href="https://docs.llamafarm.dev/blog/introducing-llamafarm#simple-as-yaml" class="hash-link" aria-label="Direct link to Simple as YAML" title="Direct link to Simple as YAML">​</a></h2>
+<p>Here's all it takes to deploy a multi-model AI pipeline:</p>
+<div class="language-yaml codeBlockContainer_aalF theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_N_DF"><pre tabindex="0" class="prism-code language-yaml codeBlock_zHgq thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_RjmQ"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"># llamafarm.yaml</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">models</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> local</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">llama</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">type</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> llama2</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">7b</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">device</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> cuda</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> embeddings</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">type</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> sentence</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">transformers</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">model</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> all</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">MiniLM</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">L6</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">v2</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">pipeline</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">embed</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">model</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> embeddings</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">input</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> documents</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">generate</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">model</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> local</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">llama</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">prompt</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">'Summarize: {context}'</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">deploy</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">local</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token boolean important" style="color:#36acaa">true</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">replicas</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">2</span><br></span></code></pre></div></div>
+<p>Run it with:</p>
+<div class="language-bash codeBlockContainer_aalF theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_N_DF"><pre tabindex="0" class="prism-code language-bash codeBlock_zHgq thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_RjmQ"><span class="token-line" style="color:#393A34"><span class="token plain">llamafarm up</span><br></span></code></pre></div></div>
+<p>That's it. LlamaFarm handles model downloading, optimization, serving, and scaling.</p>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="key-features">Key Features<a href="https://docs.llamafarm.dev/blog/introducing-llamafarm#key-features" class="hash-link" aria-label="Direct link to Key Features" title="Direct link to Key Features">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="1-model-agnostic">1. <strong>Model Agnostic</strong><a href="https://docs.llamafarm.dev/blog/introducing-llamafarm#1-model-agnostic" class="hash-link" aria-label="Direct link to 1-model-agnostic" title="Direct link to 1-model-agnostic">​</a></h3>
+<p>Support for all major models:</p>
+<ul>
+<li>Llama 2 &amp; 3</li>
+<li>GPT (via OpenAI API)</li>
+<li>Claude (via Anthropic API)</li>
+<li>Mistral</li>
+<li>Custom models</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="2-deploy-anywhere">2. <strong>Deploy Anywhere</strong><a href="https://docs.llamafarm.dev/blog/introducing-llamafarm#2-deploy-anywhere" class="hash-link" aria-label="Direct link to 2-deploy-anywhere" title="Direct link to 2-deploy-anywhere">​</a></h3>
+<p>One configuration, multiple targets:</p>
+<ul>
+<li>Local machines</li>
+<li>Kubernetes clusters</li>
+<li>AWS EC2/Lambda</li>
+<li>Azure Container Instances</li>
+<li>Edge devices</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="3-production-ready">3. <strong>Production Ready</strong><a href="https://docs.llamafarm.dev/blog/introducing-llamafarm#3-production-ready" class="hash-link" aria-label="Direct link to 3-production-ready" title="Direct link to 3-production-ready">​</a></h3>
+<p>Built-in features for real applications:</p>
+<ul>
+<li>Auto-scaling</li>
+<li>Load balancing</li>
+<li>Health checks</li>
+<li>Metrics &amp; monitoring</li>
+<li>A/B testing</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="4-developer-friendly">4. <strong>Developer Friendly</strong><a href="https://docs.llamafarm.dev/blog/introducing-llamafarm#4-developer-friendly" class="hash-link" aria-label="Direct link to 4-developer-friendly" title="Direct link to 4-developer-friendly">​</a></h3>
+<ul>
+<li>Hot reload configuration</li>
+<li>Simple CLI</li>
+<li>REST &amp; gRPC APIs</li>
+<li>SDK for Python, Node.js, Go</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="real-world-use-cases">Real-World Use Cases<a href="https://docs.llamafarm.dev/blog/introducing-llamafarm#real-world-use-cases" class="hash-link" aria-label="Direct link to Real-World Use Cases" title="Direct link to Real-World Use Cases">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="secure-document-processing">Secure Document Processing<a href="https://docs.llamafarm.dev/blog/introducing-llamafarm#secure-document-processing" class="hash-link" aria-label="Direct link to Secure Document Processing" title="Direct link to Secure Document Processing">​</a></h3>
+<div class="language-yaml codeBlockContainer_aalF theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_N_DF"><pre tabindex="0" class="prism-code language-yaml codeBlock_zHgq thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_RjmQ"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">models</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> doc</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">analyzer</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">type</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> llama2</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">13b</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">quantization</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> int8</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">pipeline</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">extract</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">type</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> pdf</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">path</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> /secure/documents</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">analyze</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">model</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> doc</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">analyzer</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">keep_local</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token boolean important" style="color:#36acaa">true</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic"># Never send to cloud</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="multi-cloud-deployment">Multi-Cloud Deployment<a href="https://docs.llamafarm.dev/blog/introducing-llamafarm#multi-cloud-deployment" class="hash-link" aria-label="Direct link to Multi-Cloud Deployment" title="Direct link to Multi-Cloud Deployment">​</a></h3>
+<div class="language-yaml codeBlockContainer_aalF theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_N_DF"><pre tabindex="0" class="prism-code language-yaml codeBlock_zHgq thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_RjmQ"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">deploy</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">targets</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">aws</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token key atrule" style="color:#00a4db">region</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> us</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">east</span><span class="token punctuation" style="color:#393A34">-</span><span class="token number" style="color:#36acaa">1</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token key atrule" style="color:#00a4db">instance</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> g4dn.xlarge</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">azure</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token key atrule" style="color:#00a4db">region</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> westus2</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token key atrule" style="color:#00a4db">sku</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> Standard_NC6s_v3</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">local</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token key atrule" style="color:#00a4db">when</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> development</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="edge-ai">Edge AI<a href="https://docs.llamafarm.dev/blog/introducing-llamafarm#edge-ai" class="hash-link" aria-label="Direct link to Edge AI" title="Direct link to Edge AI">​</a></h3>
+<div class="language-yaml codeBlockContainer_aalF theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_N_DF"><pre tabindex="0" class="prism-code language-yaml codeBlock_zHgq thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_RjmQ"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">models</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> edge</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">vision</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">type</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> mobilenet</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">optimize</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> edge</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">deploy</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">edge</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">devices</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> raspberry</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">pi</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">cluster</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> nvidia</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">jetson</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">sync</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token boolean important" style="color:#36acaa">true</span><br></span></code></pre></div></div>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="getting-started">Getting Started<a href="https://docs.llamafarm.dev/blog/introducing-llamafarm#getting-started" class="hash-link" aria-label="Direct link to Getting Started" title="Direct link to Getting Started">​</a></h2>
+<ol>
+<li><strong>Install LlamaFarm:</strong></li>
+</ol>
+<div class="language-bash codeBlockContainer_aalF theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_N_DF"><pre tabindex="0" class="prism-code language-bash codeBlock_zHgq thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_RjmQ"><span class="token-line" style="color:#393A34"><span class="token plain">pip install llamafarm</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># or</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">brew install llamafarm</span><br></span></code></pre></div></div>
+<ol start="2">
+<li><strong>Create your config:</strong></li>
+</ol>
+<div class="language-bash codeBlockContainer_aalF theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_N_DF"><pre tabindex="0" class="prism-code language-bash codeBlock_zHgq thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_RjmQ"><span class="token-line" style="color:#393A34"><span class="token plain">llamafarm init my-ai-app</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cd my-ai-app</span><br></span></code></pre></div></div>
+<ol start="3">
+<li><strong>Deploy:</strong></li>
+</ol>
+<div class="language-bash codeBlockContainer_aalF theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_N_DF"><pre tabindex="0" class="prism-code language-bash codeBlock_zHgq thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_RjmQ"><span class="token-line" style="color:#393A34"><span class="token plain">llamafarm up</span><br></span></code></pre></div></div>
+<ol start="4">
+<li><strong>Use your AI:</strong></li>
+</ol>
+<div class="language-bash codeBlockContainer_aalF theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_N_DF"><pre tabindex="0" class="prism-code language-bash codeBlock_zHgq thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_RjmQ"><span class="token-line" style="color:#393A34"><span class="token plain">curl localhost:8080/generate \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  -d '{"prompt": "Hello, LlamaFarm!"}'</span><br></span></code></pre></div></div>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="open-source--community-driven">Open Source &amp; Community Driven<a href="https://docs.llamafarm.dev/blog/introducing-llamafarm#open-source--community-driven" class="hash-link" aria-label="Direct link to Open Source &amp; Community Driven" title="Direct link to Open Source &amp; Community Driven">​</a></h2>
+<p>LlamaFarm is 100% open source under the Apache 2.0 license. We believe AI infrastructure should be:</p>
+<ul>
+<li><strong>Transparent</strong> - See exactly how your AI runs</li>
+<li><strong>Extensible</strong> - Add your own models and deployments</li>
+<li><strong>Community-owned</strong> - No vendor lock-in</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="whats-next">What's Next?<a href="https://docs.llamafarm.dev/blog/introducing-llamafarm#whats-next" class="hash-link" aria-label="Direct link to What's Next?" title="Direct link to What's Next?">​</a></h2>
+<p>This is just the beginning. Our roadmap includes:</p>
+<ul>
+<li>🔌 <strong>Plugin system</strong> for custom processors</li>
+<li>🎯 <strong>Fine-tuning workflows</strong> built-in</li>
+<li>📱 <strong>Mobile SDKs</strong> for iOS/Android</li>
+<li>🌐 <strong>Distributed training</strong> support</li>
+<li>🤖 <strong>AutoML capabilities</strong></li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="join-us">Join Us!<a href="https://docs.llamafarm.dev/blog/introducing-llamafarm#join-us" class="hash-link" aria-label="Direct link to Join Us!" title="Direct link to Join Us!">​</a></h2>
+<p>We're building LlamaFarm in the open and would love your help:</p>
+<ul>
+<li>⭐ <a href="https://github.com/llama-farm/llamafarm" target="_blank" rel="noopener noreferrer">Star us on GitHub</a></li>
+<li>💬 <a href="https://discord.gg/llamafarm" target="_blank" rel="noopener noreferrer">Join our Discord</a></li>
+<li>🐛 <a href="https://github.com/llama-farm/llamafarm/issues" target="_blank" rel="noopener noreferrer">Report issues</a></li>
+<li>🎉 <a href="https://github.com/llama-farm/llamafarm/contribute" target="_blank" rel="noopener noreferrer">Contribute</a></li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="thank-you">Thank You<a href="https://docs.llamafarm.dev/blog/introducing-llamafarm#thank-you" class="hash-link" aria-label="Direct link to Thank You" title="Direct link to Thank You">​</a></h2>
+<p>To the open-source AI community - thank you for inspiring us. To everyone who's been locked out of AI due to cost or complexity - this is for you.</p>
+<p>Let's farm some llamas! 🦙</p>
+<hr>
+<p><em>Ready to take control of your AI infrastructure? Get started with LlamaFarm today and join us in democratizing AI.</em></p>]]></content>
+        <author>
+            <name>LlamaFarm Team</name>
+            <uri>https://github.com/llama-farm/llamafarm</uri>
+        </author>
+        <category label="Announcement" term="Announcement"/>
+        <category label="LlamaFarm" term="LlamaFarm"/>
+        <category label="Release" term="Release"/>
+        <category label="Open Source" term="Open Source"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Democratizing AI - Why Local-First Matters]]></title>
+        <id>https://docs.llamafarm.dev/blog/democratizing-ai-local-first</id>
+        <link href="https://docs.llamafarm.dev/blog/democratizing-ai-local-first"/>
+        <updated>2025-01-15T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[The AI revolution is here, but it's increasingly centralized. Major tech companies control the most powerful models, your data flows through their servers, and you're at the mercy of their APIs, pricing, and policies. It's time for a change.]]></summary>
+        <content type="html"><![CDATA[<p>The AI revolution is here, but it's increasingly centralized. Major tech companies control the most powerful models, your data flows through their servers, and you're at the mercy of their APIs, pricing, and policies. It's time for a change.</p>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="the-problem-with-centralized-ai">The Problem with Centralized AI<a href="https://docs.llamafarm.dev/blog/democratizing-ai-local-first#the-problem-with-centralized-ai" class="hash-link" aria-label="Direct link to The Problem with Centralized AI" title="Direct link to The Problem with Centralized AI">​</a></h2>
+<p>Today's AI landscape presents several challenges:</p>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="1-privacy-concerns">1. <strong>Privacy Concerns</strong><a href="https://docs.llamafarm.dev/blog/democratizing-ai-local-first#1-privacy-concerns" class="hash-link" aria-label="Direct link to 1-privacy-concerns" title="Direct link to 1-privacy-concerns">​</a></h3>
+<p>When you send data to cloud-based AI services, you lose control. Your prompts, documents, and responses are processed on remote servers. For businesses handling sensitive data, healthcare providers with patient information, or anyone valuing privacy, this is a non-starter.</p>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="2-dependency-and-lock-in">2. <strong>Dependency and Lock-in</strong><a href="https://docs.llamafarm.dev/blog/democratizing-ai-local-first#2-dependency-and-lock-in" class="hash-link" aria-label="Direct link to 2-dependency-and-lock-in" title="Direct link to 2-dependency-and-lock-in">​</a></h3>
+<p>Building on top of proprietary APIs means:</p>
+<ul>
+<li>You're dependent on their uptime</li>
+<li>Subject to rate limits and quotas</li>
+<li>Vulnerable to price changes</li>
+<li>At risk if the service shuts down</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="3-cost-at-scale">3. <strong>Cost at Scale</strong><a href="https://docs.llamafarm.dev/blog/democratizing-ai-local-first#3-cost-at-scale" class="hash-link" aria-label="Direct link to 3-cost-at-scale" title="Direct link to 3-cost-at-scale">​</a></h3>
+<p>API pricing might seem reasonable for experiments, but costs explode at scale. Processing millions of requests becomes prohibitively expensive, limiting AI adoption.</p>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="4-one-size-fits-all">4. <strong>One-Size-Fits-All</strong><a href="https://docs.llamafarm.dev/blog/democratizing-ai-local-first#4-one-size-fits-all" class="hash-link" aria-label="Direct link to 4-one-size-fits-all" title="Direct link to 4-one-size-fits-all">​</a></h3>
+<p>Cloud models are trained for general use. They can't be deeply customized for your specific domain, use case, or requirements without expensive fine-tuning.</p>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="the-local-first-solution">The Local-First Solution<a href="https://docs.llamafarm.dev/blog/democratizing-ai-local-first#the-local-first-solution" class="hash-link" aria-label="Direct link to The Local-First Solution" title="Direct link to The Local-First Solution">​</a></h2>
+<p>Local-first AI flips the script:</p>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="your-hardware-your-rules"><strong>Your Hardware, Your Rules</strong><a href="https://docs.llamafarm.dev/blog/democratizing-ai-local-first#your-hardware-your-rules" class="hash-link" aria-label="Direct link to your-hardware-your-rules" title="Direct link to your-hardware-your-rules">​</a></h3>
+<p>Run AI models on your own infrastructure. Whether it's a powerful desktop, a server cluster, or edge devices, you maintain complete control.</p>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="true-data-privacy"><strong>True Data Privacy</strong><a href="https://docs.llamafarm.dev/blog/democratizing-ai-local-first#true-data-privacy" class="hash-link" aria-label="Direct link to true-data-privacy" title="Direct link to true-data-privacy">​</a></h3>
+<p>Your data never leaves your premises. Process sensitive documents, personal information, or proprietary data with confidence.</p>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="customization-freedom"><strong>Customization Freedom</strong><a href="https://docs.llamafarm.dev/blog/democratizing-ai-local-first#customization-freedom" class="hash-link" aria-label="Direct link to customization-freedom" title="Direct link to customization-freedom">​</a></h3>
+<p>Fine-tune models for your specific needs. Swap models instantly. Experiment freely without per-request costs.</p>
+<h3 class="anchor anchorWithStickyNavbar_FNw8" id="predictable-costs"><strong>Predictable Costs</strong><a href="https://docs.llamafarm.dev/blog/democratizing-ai-local-first#predictable-costs" class="hash-link" aria-label="Direct link to predictable-costs" title="Direct link to predictable-costs">​</a></h3>
+<p>Pay for hardware once, use it indefinitely. No surprise bills or usage limits.</p>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="the-best-of-both-worlds">The Best of Both Worlds<a href="https://docs.llamafarm.dev/blog/democratizing-ai-local-first#the-best-of-both-worlds" class="hash-link" aria-label="Direct link to The Best of Both Worlds" title="Direct link to The Best of Both Worlds">​</a></h2>
+<p>Local-first doesn't mean local-only. The ideal solution combines:</p>
+<ul>
+<li><strong>Local processing</strong> for sensitive data and high-volume tasks</li>
+<li><strong>Cloud resources</strong> for burst capacity or specialized models</li>
+<li><strong>Edge deployment</strong> for real-time, low-latency applications</li>
+<li><strong>Hybrid approaches</strong> that optimize for cost, performance, and privacy</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="making-it-accessible">Making It Accessible<a href="https://docs.llamafarm.dev/blog/democratizing-ai-local-first#making-it-accessible" class="hash-link" aria-label="Direct link to Making It Accessible" title="Direct link to Making It Accessible">​</a></h2>
+<p>The challenge has been complexity. Setting up local AI traditionally requires:</p>
+<ul>
+<li>Deep technical knowledge</li>
+<li>Complex dependency management</li>
+<li>Manual optimization</li>
+<li>Significant time investment</li>
+</ul>
+<p>This complexity has kept local AI out of reach for many developers and organizations.</p>
+<h2 class="anchor anchorWithStickyNavbar_FNw8" id="whats-next">What's Next?<a href="https://docs.llamafarm.dev/blog/democratizing-ai-local-first#whats-next" class="hash-link" aria-label="Direct link to What's Next?" title="Direct link to What's Next?">​</a></h2>
+<p>We believe AI should be accessible to everyone, not just those who can afford expensive cloud services or have deep ML expertise. Local-first AI, made simple, is the path forward.</p>
+<p>In our next post, we'll introduce a solution that makes deploying AI - locally, in the cloud, or anywhere - as simple as writing a configuration file.</p>
+<p>Stay tuned for the LlamaFarm announcement.</p>
+<hr>
+<p><em>What are your thoughts on local-first AI? What challenges have you faced with current AI services? Join the discussion in the comments below.</em></p>]]></content>
+        <author>
+            <name>LlamaFarm Team</name>
+            <uri>https://github.com/llama-farm/llamafarm</uri>
+        </author>
+        <category label="AI" term="AI"/>
+        <category label="Decentralization" term="Decentralization"/>
+        <category label="Privacy" term="Privacy"/>
+        <category label="Local First" term="Local First"/>
+    </entry>
+</feed>
