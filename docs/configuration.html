@@ -5,7 +5,7 @@
 <meta name="generator" content="Docusaurus v3.8.1">
 <title data-rh="true">Configuration Guide | LlamaFarm</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://docs.llamafarm.dev/img/llamafarm-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://docs.llamafarm.dev/img/llamafarm-social-card.jpg"><meta data-rh="true" property="og:url" content="https://docs.llamafarm.dev/docs/configuration"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Configuration Guide | LlamaFarm"><meta data-rh="true" name="description" content="Every LlamaFarm project is defined by a single file: llamafarm.yaml. The server validates it against JSON Schema, so missing fields surface as errors instead of hidden defaults. This guide explains each section and shows how to extend the schema responsibly."><meta data-rh="true" property="og:description" content="Every LlamaFarm project is defined by a single file: llamafarm.yaml. The server validates it against JSON Schema, so missing fields surface as errors instead of hidden defaults. This guide explains each section and shows how to extend the schema responsibly."><link data-rh="true" rel="icon" href="/img/llama-farm-favicon.svg"><link data-rh="true" rel="canonical" href="https://docs.llamafarm.dev/docs/configuration"><link data-rh="true" rel="alternate" href="https://docs.llamafarm.dev/docs/configuration" hreflang="en"><link data-rh="true" rel="alternate" href="https://docs.llamafarm.dev/docs/configuration" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Configuration","item":"https://docs.llamafarm.dev/docs/configuration/"}]}</script><link rel="alternate" type="application/rss+xml" href="/blog/rss.xml" title="LlamaFarm RSS Feed">
 <link rel="alternate" type="application/atom+xml" href="/blog/atom.xml" title="LlamaFarm Atom Feed"><link rel="stylesheet" href="/assets/css/styles.342375e4.css">
-<script src="/assets/js/runtime~main.831a7e5f.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.7c46b57a.js" defer="defer"></script>
 <script src="/assets/js/main.2be031d0.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -40,7 +40,7 @@
 <p><strong>Lemonade-specific fields:</strong></p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody><tr><td><code>backend</code></td><td>string</td><td>✅</td><td><code>llamacpp</code>, <code>onnx</code>, or <code>transformers</code></td></tr><tr><td><code>port</code></td><td>number</td><td>✅</td><td>Port number (default: 11534)</td></tr><tr><td><code>context_size</code></td><td>number</td><td>Optional</td><td>Context window size (default: 32768)</td></tr></tbody></table>
 <blockquote>
-<p><strong>Extending providers:</strong> To add a new provider enum, update <code>config/schema.yaml</code>, regenerate types via <code>config/generate-types.sh</code>, and implement routing in the server/CLI. See <a href="/docs/extending#extend-runtimes">Extending runtimes</a>.</p>
+<p><strong>Extending providers:</strong> To add a new provider enum, update <code>config/schema.yaml</code>, regenerate types via <code>config/generate_types.py</code>, and implement routing in the server/CLI. See <a href="/docs/extending#extend-runtimes">Extending runtimes</a>.</p>
 </blockquote>
 <h3 class="anchor anchorWithStickyNavbar_FNw8" id="prompts">Prompts<a href="#prompts" class="hash-link" aria-label="Direct link to Prompts" title="Direct link to Prompts">​</a></h3>
 <p>Prompts are named sets of messages that seed instructions for each session.</p>
@@ -77,7 +77,7 @@
 <h2 class="anchor anchorWithStickyNavbar_FNw8" id="extending-the-schema">Extending the Schema<a href="#extending-the-schema" class="hash-link" aria-label="Direct link to Extending the Schema" title="Direct link to Extending the Schema">​</a></h2>
 <ol>
 <li>Edit <code>config/schema.yaml</code> or <code>rag/schema.yaml</code> to add new enums/properties.</li>
-<li>Run <code>config/generate-types.sh</code> to regenerate Pydantic/Go datamodels.</li>
+<li>Run <code>config/generate_types.py</code> to regenerate Pydantic/Go datamodels.</li>
 <li>Update server/CLI logic to accept the new fields.</li>
 <li>Document the addition in this guide and the Extending section.</li>
 </ol>
