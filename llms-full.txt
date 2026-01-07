@@ -28,15 +28,15 @@ Run sophisticated AI workloads on your own hardware:
 
 LlamaFarm isn't just a wrapper—it's a complete AI development platform:
 
-| Capability | What It Does |
-|-----------|--------------|
+| Capability                               | What It Does                                                                                |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------- |
 | **RAG (Retrieval-Augmented Generation)** | Ingest PDFs, docs, CSVs and query them with AI. Your documents become searchable knowledge. |
-| **Multi-Model Runtime** | Switch between Ollama, OpenAI, vLLM, or local GGUF models in one config file. |
-| **Custom Classifiers** | Train text classifiers with 8-16 examples using SetFit. No ML expertise required. |
-| **Anomaly Detection** | Detect outliers in logs, metrics, or transactions with one API call. |
-| **OCR & Document Extraction** | Extract text and structured data from images and PDFs. |
-| **Named Entity Recognition** | Find people, organizations, and locations in your text. |
-| **Agentic Tools (MCP)** | Give AI models access to filesystems, databases, and APIs. |
+| **Multi-Model Runtime**                  | Switch between Ollama, OpenAI, vLLM, or local GGUF models in one config file.               |
+| **Custom Classifiers**                   | Train text classifiers with 8-16 examples using SetFit. No ML expertise required.           |
+| **Anomaly Detection**                    | Detect outliers in logs, metrics, or transactions with one API call.                        |
+| **OCR & Document Extraction**            | Extract text and structured data from images and PDFs.                                      |
+| **Named Entity Recognition**             | Find people, organizations, and locations in your text.                                     |
+| **Agentic Tools (MCP)**                  | Give AI models access to filesystems, databases, and APIs.                                  |
 
 ### ⚡ Developer Experience
 
@@ -60,19 +60,23 @@ The desktop app bundles everything: server, Universal Runtime, and the Designer 
 Install the `lf` command-line tool:
 
 **macOS / Linux:**
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/llama-farm/llamafarm/main/install.sh | bash
 ```
 
 **Windows (PowerShell):**
+
 ```powershell
 irm https://raw.githubusercontent.com/llama-farm/llamafarm/main/install.ps1 | iex
 ```
 
 **Or download directly:**
+
 - [Latest Release](https://github.com/llama-farm/llamafarm/releases/latest) — Download `lf` binary for your platform
 
 Verify installation:
+
 ```bash
 lf --help
 ```
@@ -90,7 +94,9 @@ lf --help
 ## What Can You Build?
 
 ### Document Q&A
+
 Upload your company's documents and ask questions in natural language:
+
 ```bash
 lf datasets upload knowledge-base ./contracts/*.pdf
 lf datasets process knowledge-base
@@ -98,7 +104,9 @@ lf chat "What are our standard payment terms?"
 ```
 
 ### Custom Intent Classification
+
 Train a classifier to route support tickets:
+
 ```python
 # Train with just 8 examples per category
 POST /v1/ml/classifier/fit
@@ -113,7 +121,9 @@ POST /v1/ml/classifier/fit
 ```
 
 ### Real-Time Anomaly Detection
+
 Monitor API logs for suspicious activity:
+
 ```python
 # Train on normal traffic
 POST /v1/ml/anomaly/fit
@@ -125,7 +135,9 @@ POST /v1/ml/anomaly/detect
 ```
 
 ### Document Processing Pipeline
+
 Extract structured data from invoices and forms:
+
 ```bash
 curl -X POST http://localhost:8000/v1/vision/ocr \
   -F "file=@invoice.pdf" \
@@ -136,11 +148,11 @@ curl -X POST http://localhost:8000/v1/vision/ocr \
 
 ## Choose Your Path
 
-| Get Started | Go Deeper | Build Your Own |
-|-------------|-----------|----------------|
-| [Quickstart](./quickstart/index.md) — Install, init, chat, ingest your first dataset | [Core Concepts](./concepts/index.md) — Architecture, sessions, and components | [Extending LlamaFarm](./extending/index.md) — Add runtimes, stores, parsers |
-| [Designer Web UI](./designer/index.md) — Visual interface for project management | [Configuration Guide](./configuration/index.md) — Schema-driven project settings | [RAG Guide](./rag/index.md) — Strategies, processing pipelines |
-| [CLI Reference](./cli/index.md) — Command matrix and examples | [Models & Runtime](./models/index.md) — Configure AI models and providers | [API Reference](./api/index.md) — Full REST API documentation |
+| Get Started                                                                          | Go Deeper                                                                        | Build Your Own                                                              |
+| ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| [Quickstart](./quickstart/index.md) — Install, init, chat, ingest your first dataset | [Core Concepts](./concepts/index.md) — Architecture, sessions, and components    | [Extending LlamaFarm](./extending/index.md) — Add runtimes, stores, parsers |
+| [Designer Web UI](./designer/index.md) — Visual interface for project management     | [Configuration Guide](./configuration/index.md) — Schema-driven project settings | [RAG Guide](./rag/index.md) — Strategies, processing pipelines              |
+| [CLI Reference](./cli/index.md) — Command matrix and examples                        | [Models & Runtime](./models/index.md) — Configure AI models and providers        | [API Reference](./api/index.md) — Full REST API documentation               |
 
 ---
 
@@ -164,7 +176,7 @@ mcp:
     - name: filesystem
       transport: stdio
       command: npx
-      args: ['-y', '@modelcontextprotocol/server-filesystem', '/path/to/dir']
+      args: ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/dir"]
 
 runtime:
   models:
@@ -196,22 +208,25 @@ Get LlamaFarm installed, ingest a dataset, and run your first RAG-powered chat i
 
 Download the all-in-one desktop application:
 
-| Platform | Download |
-|----------|----------|
-| **Mac (M1+)** | [⬇️ Download](https://github.com/llama-farm/llamafarm/releases/latest) |
-| **Windows** | [⬇️ Download](https://github.com/llama-farm/llamafarm/releases/latest) |
-| **Linux** | [⬇️ Download](https://github.com/llama-farm/llamafarm/releases/latest) |
+| Platform            | Download                                                                                                                    |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| **Mac (Universal)** | [⬇️ Download](https://github.com/llama-farm/llamafarm/releases/latest/download/LlamaFarm-desktop-app-mac-universal.dmg)     |
+| **Windows**         | [⬇️ Download](https://github.com/llama-farm/llamafarm/releases/latest/download/LlamaFarm-desktop-app-windows.exe)           |
+| **Linux (x86_64)**  | [⬇️ Download](https://github.com/llama-farm/llamafarm/releases/latest/download/LlamaFarm-desktop-app-linux-x86_64.AppImage) |
+| **Linux (arm64)**   | [⬇️ Download](https://github.com/llama-farm/llamafarm/releases/latest/download/LlamaFarm-desktop-app-linux-arm64.AppImage)  |
 
 The desktop app bundles everything you need—no additional installation required.
 
 ### Option B: CLI Installation
 
 **macOS / Linux:**
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/llama-farm/llamafarm/main/install.sh | bash
 ```
 
 **Windows (PowerShell):**
+
 ```powershell
 irm https://raw.githubusercontent.com/llama-farm/llamafarm/main/install.ps1 | iex
 ```
@@ -220,21 +235,23 @@ irm https://raw.githubusercontent.com/llama-farm/llamafarm/main/install.ps1 | ie
 
 Download the `lf` binary directly from the [releases page](https://github.com/llama-farm/llamafarm/releases/latest):
 
-| Platform | Binary |
-|----------|--------|
-| macOS (Apple Silicon) | `lf-darwin-arm64` |
-| macOS (Intel) | `lf-darwin-amd64` |
-| Linux (x64) | `lf-linux-amd64` |
-| Linux (ARM64) | `lf-linux-arm64` |
-| Windows | `lf-windows-amd64.exe` |
+| Platform              | Binary                 |
+| --------------------- | ---------------------- |
+| macOS (Apple Silicon) | `lf-darwin-arm64`      |
+| macOS (Intel)         | `lf-darwin-amd64`      |
+| Linux (x64)           | `lf-linux-amd64`       |
+| Linux (arm64)         | `lf-linux-arm64`       |
+| Windows (x86_64)      | `lf-windows-amd64.exe` |
 
 After downloading, make it executable and add to your PATH:
+
 ```bash
 chmod +x lf-darwin-arm64
 sudo mv lf-darwin-arm64 /usr/local/bin/lf
 ```
 
 Verify installation:
+
 ```bash
 lf --help
 ```
@@ -248,6 +265,7 @@ For best RAG results with longer documents, increase the Ollama context window:
 3. Adjust the context window size (recommended: 32K+ for documents)
 
 Pull a model if you haven't already:
+
 ```bash
 ollama pull llama3.2
 ollama pull nomic-embed-text  # For embeddings
@@ -269,6 +287,7 @@ lf start
 ```
 
 This command:
+
 - Starts the API server and Universal Runtime natively
 - Opens the interactive chat TUI
 - Launches the Designer web UI at `http://localhost:8000`
@@ -310,6 +329,7 @@ lf chat "What can you do?"
 ```
 
 Useful options:
+
 - `--no-rag` — Bypass retrieval, hit the model directly
 - `--database`, `--retrieval-strategy` — Override RAG behavior
 - `--curl` — Print the equivalent curl command
@@ -341,6 +361,7 @@ lf rag query --database main_db "What are the key findings?"
 ```
 
 Useful flags:
+
 - `--top-k 10` — Number of results
 - `--filter "file_type:pdf"` — Metadata filtering
 - `--include-metadata` — Show document sources
