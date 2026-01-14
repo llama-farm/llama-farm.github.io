@@ -11,7 +11,7 @@
 
 
 <script src="/gtm-init.js" async></script><link rel="stylesheet" href="/assets/css/styles.f25236e7.css">
-<script src="/assets/js/runtime~main.816c5801.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.2f1503bc.js" defer="defer"></script>
 <script src="/assets/js/main.caaabc35.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -46,8 +46,8 @@
 <li class=""><strong>Create</strong> a dataset referencing a strategy and database.<!-- -->
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">lf datasets create -s pdf_ingest -b main_db research-notes</span><br></span></code></pre></div></div>
 </li>
-<li class=""><strong>Upload</strong> files via <code>lf datasets upload</code> (supports globs and directories). The CLI stores file hashes for dedupe.</li>
-<li class=""><strong>Process</strong> documents with <code>lf datasets process research-notes</code>. The server schedules a Celery job; monitor progress in the CLI output and server logs.</li>
+<li class=""><strong>Upload</strong> files via <code>lf datasets upload</code> (supports globs and directories). Auto-processing runs by default; use <code>--no-process</code> or <code>--bulk</code> for batch uploads.</li>
+<li class=""><strong>Process</strong> documents with <code>lf datasets process research-notes</code> only when you skipped auto-processing. The server schedules a Celery job; monitor progress in the CLI output and server logs.</li>
 <li class=""><strong>Query</strong> with <code>lf rag query</code> to validate retrieval quality.</li>
 </ol>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="querying--retrieval-strategies">Querying &amp; Retrieval Strategies<a href="#querying--retrieval-strategies" class="hash-link" aria-label="Direct link to Querying &amp; Retrieval Strategies" title="Direct link to Querying &amp; Retrieval Strategies" translate="no">​</a></h2>
