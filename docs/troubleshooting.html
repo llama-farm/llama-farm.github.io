@@ -11,7 +11,7 @@
 
 
 <script src="/gtm-init.js" async></script><link rel="stylesheet" href="/assets/css/styles.f25236e7.css">
-<script src="/assets/js/runtime~main.02a87f15.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.45c53528.js" defer="defer"></script>
 <script src="/assets/js/main.07ef0910.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -41,7 +41,7 @@
 <li class="">Pass explicit <code>session_id</code> to API calls or set <code>LLAMAFARM_SESSION_ID</code> when testing stateless flows.</li>
 </ul>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="build--development-issues">Build &amp; Development Issues<a href="#build--development-issues" class="hash-link" aria-label="Direct link to Build &amp; Development Issues" title="Direct link to Build &amp; Development Issues" translate="no">​</a></h2>
-<table><thead><tr><th>Issue</th><th>Cause</th><th>Fix</th></tr></thead><tbody><tr><td><code>nx build docs</code> sqlite I/O error</td><td>Nx cache database lock or permission issue</td><td>Remove <code>.nx/</code> cache directory or run with <code>NX_SKIP_NX_CACHE=1</code>.</td></tr><tr><td>Docker containers fail to start</td><td>Port conflicts or missing dependencies</td><td>Check if ports 8000/6379/5432 are available. Run <code>lf services stop</code> first, then <code>lf services start</code>.</td></tr><tr><td>Python module import errors</td><td>Virtual environment not activated or dependencies not installed</td><td>Run <code>cd server &amp;&amp; uv sync</code> or <code>cd rag &amp;&amp; uv sync</code> to install dependencies.</td></tr></tbody></table>
+<table><thead><tr><th>Issue</th><th>Cause</th><th>Fix</th></tr></thead><tbody><tr><td><code>nx build docs</code> sqlite I/O error</td><td>Nx cache database lock or permission issue</td><td>Remove <code>.nx/</code> cache directory or run with <code>NX_SKIP_NX_CACHE=1</code>.</td></tr><tr><td>Docker containers fail to start</td><td>Port conflicts or missing dependencies</td><td>Check if ports 14345/6379/5432 are available. Run <code>lf services stop</code> first, then <code>lf services start</code>.</td></tr><tr><td>Python module import errors</td><td>Virtual environment not activated or dependencies not installed</td><td>Run <code>cd server &amp;&amp; uv sync</code> or <code>cd rag &amp;&amp; uv sync</code> to install dependencies.</td></tr></tbody></table>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="extensibility-pitfalls">Extensibility Pitfalls<a href="#extensibility-pitfalls" class="hash-link" aria-label="Direct link to Extensibility Pitfalls" title="Direct link to Extensibility Pitfalls" translate="no">​</a></h2>
 <ul>
 <li class="">Forgot to regenerate types after editing <code>config/schema.yaml</code> or <code>rag/schema.yaml</code> → run <code>config/generate_types.py</code>.</li>

@@ -11,7 +11,7 @@
 
 
 <script src="/gtm-init.js" async></script><link rel="stylesheet" href="/assets/css/styles.f25236e7.css">
-<script src="/assets/js/runtime~main.02a87f15.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.45c53528.js" defer="defer"></script>
 <script src="/assets/js/main.07ef0910.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -25,7 +25,7 @@
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="subcommands">Subcommands<a href="#subcommands" class="hash-link" aria-label="Direct link to Subcommands" title="Direct link to Subcommands" translate="no">​</a></h2>
 <table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>status</code></td><td>Check status of all services</td></tr><tr><td><code>start</code></td><td>Start services</td></tr><tr><td><code>stop</code></td><td>Stop services</td></tr></tbody></table>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="available-services">Available Services<a href="#available-services" class="hash-link" aria-label="Direct link to Available Services" title="Direct link to Available Services" translate="no">​</a></h2>
-<table><thead><tr><th>Service</th><th>Description</th><th>Default Port</th></tr></thead><tbody><tr><td><code>server</code></td><td>Main FastAPI server</td><td>8000</td></tr><tr><td><code>rag</code></td><td>RAG/Celery worker</td><td>N/A</td></tr><tr><td><code>universal-runtime</code></td><td>Universal Runtime server for HuggingFace models</td><td>11540</td></tr></tbody></table>
+<table><thead><tr><th>Service</th><th>Description</th><th>Default Port</th></tr></thead><tbody><tr><td><code>server</code></td><td>Main FastAPI server</td><td>14345</td></tr><tr><td><code>rag</code></td><td>RAG/Celery worker</td><td>N/A</td></tr><tr><td><code>universal-runtime</code></td><td>Universal Runtime server for HuggingFace models</td><td>11540</td></tr></tbody></table>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="orchestration-modes">Orchestration Modes<a href="#orchestration-modes" class="hash-link" aria-label="Direct link to Orchestration Modes" title="Direct link to Orchestration Modes" translate="no">​</a></h2>
 <p>LlamaFarm supports multiple orchestration modes, controlled by the <code>LF_ORCHESTRATION_MODE</code> environment variable:</p>
 <table><thead><tr><th>Mode</th><th>Description</th></tr></thead><tbody><tr><td><code>native</code> (default)</td><td>Run services as native processes</td></tr><tr><td><code>docker</code></td><td>Run services as Docker containers</td></tr><tr><td><code>auto</code></td><td>Auto-detect best mode (prefers native)</td></tr></tbody></table>
@@ -80,7 +80,7 @@
 <ol>
 <li class="">
 <p>Check if the port is already in use:</p>
-<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">lsof -i :8000  # For server</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">lsof -i :11540 # For universal-runtime</span><br></span></code></pre></div></div>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">lsof -i :14345  # For server</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">lsof -i :11540 # For universal-runtime</span><br></span></code></pre></div></div>
 </li>
 <li class="">
 <p>Kill conflicting processes:</p>

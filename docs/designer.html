@@ -11,7 +11,7 @@
 
 
 <script src="/gtm-init.js" async></script><link rel="stylesheet" href="/assets/css/styles.f25236e7.css">
-<script src="/assets/js/runtime~main.02a87f15.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.45c53528.js" defer="defer"></script>
 <script src="/assets/js/main.07ef0910.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -50,13 +50,13 @@
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">lf start</span><br></span></code></pre></div></div>
 <p>This automatically launches:</p>
 <ul>
-<li class="">The FastAPI server (port 8000)</li>
+<li class="">The FastAPI server (port 14345)</li>
 <li class="">The RAG worker</li>
-<li class="">The Designer web UI (port <strong>8000</strong>)</li>
+<li class="">The Designer web UI (port <strong>14345</strong>)</li>
 </ul>
 <p>Once started, open your browser to:</p>
-<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">http://localhost:8000</span><br></span></code></pre></div></div>
-<p>The Designer is served by the same FastAPI server, so it shares port 8000 with the API.</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">http://localhost:14345</span><br></span></code></pre></div></div>
+<p>The Designer is served by the same FastAPI server, so it shares port 14345 with the API.</p>
 <p><img decoding="async" loading="lazy" alt="Designer Home Page" src="/assets/images/designer-home-d9f417471cc9b81387399b06841b80e2.png" width="1803" height="1100" class="img_ev3q">
 <em>The Designer home page where you can create and select projects</em></p>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="main-sections">Main Sections<a href="#main-sections" class="hash-link" aria-label="Direct link to Main Sections" title="Direct link to Main Sections" translate="no">​</a></h2>
@@ -129,12 +129,12 @@
 <p><strong>Designer won&#x27;t load:</strong></p>
 <ul>
 <li class="">Ensure the server is running (<code>lf start</code> or check Docker containers)</li>
-<li class="">Verify the server is accessible at <code>http://localhost:8000/health/liveness</code></li>
+<li class="">Verify the server is accessible at <code>http://localhost:14345/health/liveness</code></li>
 <li class="">Check browser console for connection errors</li>
 </ul>
 <p><strong>Can&#x27;t connect to API:</strong></p>
 <ul>
-<li class="">The Designer expects the server at <code>localhost:8000</code> by default</li>
+<li class="">The Designer expects the server at <code>localhost:14345</code> by default</li>
 <li class="">If using a custom setup, set the <code>VITE_APP_API_URL</code> environment variable</li>
 </ul>
 <p><strong>Changes not saving:</strong></p>
