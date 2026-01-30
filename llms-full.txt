@@ -2562,7 +2562,7 @@ runtime:
 
 ### Prompts
 
-Prompts are named sets of messages that seed instructions for each session.
+Prompts are named sets of messages that seed instructions for each session. Prompts support **dynamic variable substitution** using Jinja2-style `{{variable}}` syntax.
 
 ```yaml
 prompts:
@@ -2577,6 +2577,51 @@ prompts:
 - Roles can be `system`, `user`, or `assistant` (anything supported by the runtime).
 - Models can select which prompt sets to use via `prompts: [list of names]`; if omitted, all prompts stack in definition order.
 - Prompts are appended before user input; combine with RAG context via the RAG guide.
+
+#### Dynamic Variable Substitution
+
+Use Jinja2-style `{{variable}}` syntax to inject values at request time:
+
+```yaml
+prompts:
+  - name: personalized
+    messages:
+      - role: system
+        content: |
+          You are a customer service assistant for {{company_name | Acme Corp}}.
+          The customer's name is {{user_name | Valued Customer}}.
+          Account tier: {{account_tier | standard}}
+```
+
+**Syntax:**
+
+| Pattern | Description | Example |
+|---------|-------------|---------|
+| `{{variable}}` | Required variable | `Hello {{name}}` → Error if `name` not provided |
+| `{{variable \| default}}` | Variable with default | `Hello {{name \| Guest}}` → `Hello Guest` if missing |
+| `{{ variable }}` | Whitespace allowed | Same as above |
+
+**Passing variables via API:**
+
+```bash
+curl -X POST http://localhost:14345/v1/projects/ns/project/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [{"role": "user", "content": "Hi"}],
+    "variables": {
+      "company_name": "TechCorp",
+      "user_name": "Alice",
+      "account_tier": "premium"
+    }
+  }'
+```
+
+Variables can be used in:
+- **Prompt message content** - Personalize system instructions
+- **Tool descriptions** - Customize tool behavior per request
+- **Tool parameter descriptions** - Dynamic parameter help text
+
+See the [Prompts Guide](../prompts/index.md) for detailed examples.
 
 ### RAG Configuration
 
@@ -3487,6 +3532,116 @@ datasets:
     data_processing_strategy: universal_processor
 ```
 
+## Dynamic Variables in Prompts and Tools
+
+Use Jinja2-style `{{variable | default}}` syntax to customize prompts and tools at request time:
+
+```yaml
+version: v1
+name: dynamic-demo
+namespace: default
+
+runtime:
+  default_model: assistant
+  models:
+    - name: assistant
+      provider: universal
+      model: llama3.2:3b
+      default: true
+      tool_call_strategy: native_api
+      prompts:
+        - system
+        - context
+      tools:
+        - type: function
+          name: search_knowledge_base
+          description: "Search the {{company_name | Company}} knowledge base"
+          parameters:
+            type: object
+            properties:
+              query:
+                type: string
+                description: "Search query for {{department | General}} topics"
+            required:
+              - query
+        - type: function
+          name: create_ticket
+          description: "Create a support ticket for {{user_name | a customer}}"
+          parameters:
+            type: object
+            properties:
+              title:
+                type: string
+              priority:
+                type: string
+                enum: ["low", "medium", "high"]
+            required:
+              - title
+
+prompts:
+  - name: system
+    messages:
+      - role: system
+        content: |
+          You are a helpful assistant for {{company_name | Acme Corp}}.
+          You work in the {{department | General}} department.
+          Current date: {{current_date | today}}
+
+  - name: context
+    messages:
+      - role: system
+        content: |
+          ## Customer Information
+          - Name: {{user_name | Valued Customer}}
+          - Account Tier: {{account_tier | standard}}
+          - Language: {{language | English}}
+
+          Adjust responses based on tier:
+          - basic: Focus on self-service
+          - standard: Provide helpful guidance
+          - premium: Offer personalized assistance
+```
+
+**Usage with full variables:**
+
+```bash
+curl -X POST http://localhost:14345/v1/projects/default/dynamic-demo/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [{"role": "user", "content": "Hi, what can you help me with?"}],
+    "variables": {
+      "company_name": "TechCorp Solutions",
+      "department": "Technical Support",
+      "user_name": "Alice Johnson",
+      "account_tier": "premium",
+      "current_date": "2024-01-15"
+    }
+  }'
+```
+
+**Usage with defaults (minimal variables):**
+
+```bash
+curl -X POST http://localhost:14345/v1/projects/default/dynamic-demo/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [{"role": "user", "content": "Hello!"}],
+    "variables": {
+      "user_name": "Bob"
+    }
+  }'
+```
+
+Unprovided variables use their defaults (e.g., `company_name` becomes "Acme Corp").
+
+**Variable syntax:**
+
+| Pattern | Description |
+|---------|-------------|
+| `{{variable}}` | Required - error if not provided |
+| `{{variable \| default}}` | Uses default if not provided |
+| `{{ variable }}` | Whitespace is allowed |
+
 ## Qdrant Production Setup
 
 Production-ready configuration with Qdrant vector database:
@@ -3818,6 +3973,8 @@ Send a chat message to the LLM. This endpoint is compatible with OpenAI's chat c
 - `rag_queries` (optional): Array of custom queries for RAG retrieval, overriding the user message. Can be a single query `["my query"]` or multiple queries `["query1", "query2"]` - results from multiple queries are executed concurrently, merged, and deduplicated
 - `think` (optional): Enable thinking/reasoning mode for supported models like Qwen3 (default: `false`)
 - `thinking_budget` (optional): Maximum tokens for thinking process when `think: true` (default: `1024`)
+- `variables` (optional): Object of key-value pairs for dynamic template substitution in prompts and tools. See [Dynamic Variables](#dynamic-variables) below
+- `tools` (optional): Array of tool definitions (OpenAI format). Tools can also contain `{{variable}}` placeholders
 
 **Response (Non-Streaming):**
 
@@ -4003,6 +4160,143 @@ curl -X POST http://localhost:14345/v1/projects/my-org/chatbot/chat/completions 
 ```
 
 Results from multiple queries are automatically executed concurrently, merged, deduplicated by content, sorted by relevance score, and limited to `rag_top_k` total results.
+
+### Dynamic Variables
+
+LlamaFarm supports dynamic variable substitution in prompts and tools using Jinja2-style `{{variable}}` syntax. Pass variable values in the `variables` field of your request, and they are resolved before the request is processed.
+
+**Example (Basic Variables):**
+
+If your `llamafarm.yaml` contains prompts with variables:
+
+```yaml
+prompts:
+  - name: personalized
+    messages:
+      - role: system
+        content: |
+          You are a customer service assistant for {{company_name | Acme Corp}}.
+          Customer name: {{user_name | Valued Customer}}
+          Account tier: {{account_tier | standard}}
+```
+
+Pass the values at request time:
+
+```bash
+curl -X POST http://localhost:14345/v1/projects/my-org/chatbot/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      {"role": "user", "content": "What can you help me with?"}
+    ],
+    "variables": {
+      "company_name": "TechCorp Solutions",
+      "user_name": "Alice Johnson",
+      "account_tier": "premium"
+    }
+  }'
+```
+
+The system prompt becomes: "You are a customer service assistant for TechCorp Solutions. Customer name: Alice Johnson. Account tier: premium."
+
+**Example (Variables in Tools):**
+
+Tool definitions in your config can also use variables:
+
+```yaml
+runtime:
+  models:
+    - name: assistant
+      tools:
+        - type: function
+          name: search_kb
+          description: "Search the {{company_name | Company}} knowledge base"
+          parameters:
+            type: object
+            properties:
+              query:
+                type: string
+                description: "Search query for {{department | General}} topics"
+```
+
+Pass values to customize the tool:
+
+```bash
+curl -X POST http://localhost:14345/v1/projects/my-org/chatbot/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [{"role": "user", "content": "Search for shipping policies"}],
+    "variables": {
+      "company_name": "Acme Corp",
+      "department": "Customer Support"
+    }
+  }'
+```
+
+**Example (Request-Level Tools with Variables):**
+
+You can also pass tools directly in the request with variables:
+
+```bash
+curl -X POST http://localhost:14345/v1/projects/my-org/chatbot/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [{"role": "user", "content": "What tools do you have?"}],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "lookup",
+          "description": "Look up data in {{data_source | the database}}",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string", "description": "ID to look up"}
+            },
+            "required": ["id"]
+          }
+        }
+      }
+    ],
+    "variables": {
+      "data_source": "the CRM system"
+    }
+  }'
+```
+
+**Variable Syntax:**
+
+| Pattern | Behavior |
+|---------|----------|
+| `{{variable}}` | Required - returns error 400 if not provided |
+| `{{variable \| default}}` | Optional - uses default if not provided |
+| `{{ variable }}` | Whitespace is allowed |
+
+**Supported Value Types:**
+
+- `string` - Inserted as-is
+- `int`, `float` - Converted to string
+- `boolean` - Converted to `True` or `False` (Python-style)
+- `null` - Converted to empty string
+
+Complex types (arrays, objects) are not supported and will return an error.
+
+**Error Handling:**
+
+If a required variable (no default) is missing, the API returns:
+
+```json
+{
+  "detail": "Template resolution failed: Template variable '{{ user_id }}' not found in provided variables. Available variables: ['company_name']. Add a default with '{{ user_id | default_value }}'."
+}
+```
+
+**Use Cases:**
+
+- **Multi-tenant apps** - Customize branding per customer
+- **Personalization** - Inject user names, roles, preferences
+- **A/B testing** - Swap prompt variants without config changes
+- **Dynamic context** - Pass dates, session IDs, account info
 
 ### Get Chat History
 
@@ -9926,7 +10220,43 @@ LlamaFarm selects an agent handler based on configuration:
 - **RAG chat** – augments prompts with retrieved context, citations, and guardrails.
 - **Classifier / Custom** – future handlers for specialized workflows.
 
-Choose handler behaviour in your project configuration (e.g., advanced agents defined by the server). Ensure the model supports the required features—some small models (TinyLlama) don’t handle tools, so stick with simple chat.
+Choose handler behaviour in your project configuration (e.g., advanced agents defined by the server). Ensure the model supports the required features—some small models (TinyLlama) don't handle tools, so stick with simple chat.
+
+## Inline Tools with Dynamic Variables
+
+Models can define tools inline in the config, and these tools support dynamic variable substitution:
+
+```yaml
+runtime:
+  models:
+    - name: assistant
+      provider: universal
+      model: llama3.2:3b
+      tool_call_strategy: native_api
+      tools:
+        - type: function
+          name: search_docs
+          description: "Search {{company_name | the company}} documentation"
+          parameters:
+            type: object
+            properties:
+              query:
+                type: string
+                description: "Search query for {{department | general}} topics"
+            required:
+              - query
+```
+
+Pass values at request time via the `variables` field:
+
+```bash
+curl -X POST .../chat/completions -d '{
+  "messages": [{"role": "user", "content": "Find shipping info"}],
+  "variables": {"company_name": "Acme Corp", "department": "logistics"}
+}'
+```
+
+See [Dynamic Variables](../prompts/index.md#dynamic-variables) for full syntax documentation.
 
 ## Lemonade Runtime
 
@@ -12028,7 +12358,7 @@ LF_DATA_DIR=/path/to/llamafarm/data
 
 # Prompts
 
-Prompts in LlamaFarm are simple but powerful: you define static instructions in `llamafarm.yaml`, and the runtime merges them with chat history and (optionally) RAG context. This section outlines current capabilities and roadmap plans.
+Prompts in LlamaFarm are simple but powerful: you define instructions in `llamafarm.yaml`, and the runtime merges them with chat history and (optionally) RAG context. Prompts support **dynamic variable substitution** using Jinja2-style `{{variable}}` syntax, allowing you to customize behavior per-request.
 
 ## Prompt Configuration
 
@@ -12049,22 +12379,114 @@ prompts:
 - Models can specify which prompt sets to use via `prompts: [list of names]`; if omitted, all prompts stack in definition order.
 - Combine with RAG by including instructions explaining how to use context snippets (the server injects them automatically).
 
+## Dynamic Variables
+
+Use Jinja2-style template syntax to inject values at request time. This is ideal for personalizing prompts per user, session, or context.
+
+### Syntax
+
+```yaml
+# Required variable (error if not provided)
+content: "Hello {{user_name}}"
+
+# Variable with default (uses default if not provided)
+content: "Welcome to {{company | Our Service}}"
+
+# Whitespace is allowed
+content: "Hello {{ user_name }}"
+```
+
+### Example: Personalized Customer Service
+
+```yaml
+prompts:
+  - name: system
+    messages:
+      - role: system
+        content: |
+          You are a helpful customer service assistant for {{company_name | Acme Corp}}.
+          You work in the {{department | General}} department.
+          Current date: {{current_date | today}}
+          Be professional, helpful, and concise in your responses.
+
+  - name: context
+    messages:
+      - role: system
+        content: |
+          ## Customer Information
+          - Name: {{user_name | Valued Customer}}
+          - Account Tier: {{account_tier | standard}}
+          - Preferred Language: {{language | English}}
+
+          Adjust your responses based on the customer's tier:
+          - basic: Focus on self-service options
+          - standard: Provide helpful guidance
+          - premium: Offer personalized, detailed assistance
+```
+
+### Passing Variables via API
+
+Variables are passed in the `variables` field of the chat request:
+
+```bash
+curl -X POST http://localhost:14345/v1/projects/my-org/chatbot/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [{"role": "user", "content": "Hello!"}],
+    "variables": {
+      "company_name": "TechCorp Solutions",
+      "user_name": "Alice Johnson",
+      "account_tier": "premium",
+      "current_date": "2024-01-15"
+    }
+  }'
+```
+
+### Variable Behavior
+
+| Scenario | Syntax | Result |
+|----------|--------|--------|
+| Variable provided | `{{name}}` with `{"name": "Alice"}` | `Alice` |
+| Variable with default, not provided | `{{name \| Guest}}` with `{}` | `Guest` |
+| Required variable missing | `{{name}}` with `{}` | **Error 400** |
+| Null value | `{{name}}` with `{"name": null}` | Empty string |
+| Non-string types | `{{count}}` with `{"count": 42}` | `42` (converted) |
+
+### Supported Types
+
+Variable values can be:
+- **String** - Inserted as-is
+- **Integer** - Converted to string (e.g., `42` → `"42"`)
+- **Float** - Converted to string (e.g., `3.14` → `"3.14"`)
+- **Boolean** - Converted to `True` or `False` (Python-style)
+- **None/null** - Converted to empty string
+
+Complex types (lists, dicts) are **not supported** and will raise an error.
+
 ## Best Practices
 
-- **Explain context usage**: remind the model that context chunks contain citations or metadata.
-- **Handle non-RAG scenarios**: mention what to do when no documents are retrieved (“answer from general knowledge” or “state that no information was found”).
-- **Keep prompts concise**: long system instructions can reduce available tokens on smaller models.
-- **Avoid conflicting instructions**: align prompts with agent handler expectations (structured vs. simple chat).
+- **Use defaults for optional context**: Always provide defaults for variables that might not be passed in every request.
+- **Keep required variables minimal**: Only mark variables as required (no default) when they're truly essential.
+- **Explain context usage**: Remind the model that context chunks contain citations or metadata.
+- **Handle non-RAG scenarios**: Mention what to do when no documents are retrieved.
+- **Keep prompts concise**: Long system instructions can reduce available tokens on smaller models.
+- **Avoid conflicting instructions**: Align prompts with agent handler expectations (structured vs. simple chat).
 
-## Roadmap & Limitations
+## Use Cases
 
-- Prompt templates, versioning, and evaluation tooling are in development. Track progress in the roadmap.
-- For now, dynamic templating (Jinja, variables) is not built-in—generate prompts upstream if needed.
+Dynamic variables are ideal for:
+
+- **Multi-tenant applications** - Customize branding per customer (`{{company_name}}`)
+- **Personalization** - Inject user names, preferences, or roles
+- **A/B testing** - Swap prompt variants without config changes
+- **Context injection** - Pass session-specific data (dates, account tiers)
+- **Internationalization** - Set language preferences per request
 
 ## Related Guides
 
-- [Configuration Guide](../configuration/index.md)
-- [RAG Guide](../rag/index.md) (for context injection tips)
+- [Configuration Guide](../configuration/index.md) - Full variable syntax reference
+- [API Reference](../api/index.md#send-chat-message-openai-compatible) - Using `variables` in requests
+- [RAG Guide](../rag/index.md) - Context injection tips
 - [Extending agent handlers](../extending/index.md#extend-runtimes)
 
 ---
