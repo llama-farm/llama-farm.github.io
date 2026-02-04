@@ -11,8 +11,8 @@
 
 
 <script src="/gtm-init.js" async></script><link rel="stylesheet" href="/assets/css/styles.f25236e7.css">
-<script src="/assets/js/runtime~main.91e7b361.js" defer="defer"></script>
-<script src="/assets/js/main.07ef0910.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.408dfa0d.js" defer="defer"></script>
+<script src="/assets/js/main.3ea252f1.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg style="display: none;"><defs>
@@ -138,6 +138,7 @@
 <li class=""><code>POST /v1/vision/documents/extract</code> - Document extraction/VQA (accepts file upload or base64)</li>
 </ul>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ml-custom-classifiers--anomaly-detection">ML (Custom Classifiers &amp; Anomaly Detection)<a href="#ml-custom-classifiers--anomaly-detection" class="hash-link" aria-label="Direct link to ML (Custom Classifiers &amp; Anomaly Detection)" title="Direct link to ML (Custom Classifiers &amp; Anomaly Detection)" translate="no">​</a></h3>
+<p><strong>Text Classification (SetFit):</strong></p>
 <ul>
 <li class=""><code>POST /v1/ml/classifier/fit</code> - Train custom text classifier (SetFit few-shot)</li>
 <li class=""><code>POST /v1/ml/classifier/predict</code> - Classify texts using trained model</li>
@@ -145,13 +146,36 @@
 <li class=""><code>POST /v1/ml/classifier/load</code> - Load classifier from disk</li>
 <li class=""><code>GET /v1/ml/classifier/models</code> - List saved classifiers</li>
 <li class=""><code>DELETE /v1/ml/classifier/models/{name}</code> - Delete saved classifier</li>
+</ul>
+<p><strong>Batch Anomaly Detection:</strong></p>
+<ul>
 <li class=""><code>POST /v1/ml/anomaly/fit</code> - Train anomaly detector</li>
 <li class=""><code>POST /v1/ml/anomaly/score</code> - Score data points for anomalies</li>
 <li class=""><code>POST /v1/ml/anomaly/detect</code> - Detect anomalies (returns only anomalous points)</li>
 <li class=""><code>POST /v1/ml/anomaly/save</code> - Save trained anomaly model</li>
 <li class=""><code>POST /v1/ml/anomaly/load</code> - Load anomaly model from disk</li>
 <li class=""><code>GET /v1/ml/anomaly/models</code> - List saved anomaly models</li>
+<li class=""><code>GET /v1/ml/anomaly/backends</code> - List all 12 PyOD backends with metadata</li>
 <li class=""><code>DELETE /v1/ml/anomaly/models/{filename}</code> - Delete saved anomaly model</li>
+</ul>
+<p><strong>Streaming Anomaly Detection:</strong></p>
+<ul>
+<li class=""><code>POST /v1/ml/anomaly/stream</code> - Process streaming data with auto-retraining</li>
+<li class=""><code>GET /v1/ml/anomaly/stream/detectors</code> - List active streaming detectors</li>
+<li class=""><code>GET /v1/ml/anomaly/stream/{model_id}</code> - Get detector statistics</li>
+<li class=""><code>POST /v1/ml/anomaly/stream/{model_id}/reset</code> - Reset detector to cold start</li>
+<li class=""><code>DELETE /v1/ml/anomaly/stream/{model_id}</code> - Delete streaming detector</li>
+</ul>
+<p><strong>Polars Data Buffers:</strong></p>
+<ul>
+<li class=""><code>POST /v1/ml/polars/buffers</code> - Create named data buffer</li>
+<li class=""><code>GET /v1/ml/polars/buffers</code> - List all buffers with statistics</li>
+<li class=""><code>GET /v1/ml/polars/buffers/{buffer_id}</code> - Get buffer statistics</li>
+<li class=""><code>DELETE /v1/ml/polars/buffers/{buffer_id}</code> - Delete buffer</li>
+<li class=""><code>POST /v1/ml/polars/buffers/{buffer_id}/clear</code> - Clear buffer data</li>
+<li class=""><code>POST /v1/ml/polars/append</code> - Append data to buffer</li>
+<li class=""><code>POST /v1/ml/polars/features</code> - Compute rolling features</li>
+<li class=""><code>GET /v1/ml/polars/buffers/{buffer_id}/data</code> - Get raw buffer data</li>
 </ul>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="voice-chat-real-time-voice-assistant">Voice Chat (Real-time Voice Assistant)<a href="#voice-chat-real-time-voice-assistant" class="hash-link" aria-label="Direct link to Voice Chat (Real-time Voice Assistant)" title="Direct link to Voice Chat (Real-time Voice Assistant)" translate="no">​</a></h3>
 <ul>
