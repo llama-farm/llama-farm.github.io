@@ -14781,6 +14781,510 @@ Thanks for helping grow LlamaFarm!
 
 ---
 
+# Changelog Documentation System
+
+This directory contains human-readable release notes for LlamaFarm, automatically generated from conventional commits.
+
+## How It Works
+
+### Automated Workflow (Primary Method)
+
+When a release PR is created by release-please:
+
+1. **Workflow triggers** - [.github/workflows/update-changelog-docs.yml](../../../../.github/workflows/update-changelog-docs.yml) detects the release PR (filtered by `CHANGELOG.md` changes)
+2. **Extracts version** - Reads the latest version from CHANGELOG.md
+3. **Generates prose** - Uses LlamaFarm AI to transform conventional commits into narrative release notes
+4. **Updates index** - Adds a new `<details>` accordion section to `index.md`
+5. **Commits to PR** - Pushes the changelog docs back to the release PR
+6. **Posts comment** - Adds a comment with status (success/failure)
+
+### Manual Fallback (Backup Method)
+
+If the automated workflow fails or you need to backfill historical releases:
+
+```bash
+# Generate changelog for latest release
+./scripts/update-changelog-docs.sh
+
+# Generate for specific version
+./scripts/update-changelog-docs.sh 0.0.26
+
+# Generate for all versions in CHANGELOG.md
+./scripts/update-changelog-docs.sh --all
+```
+
+**Requirements for manual script:**
+- LlamaFarm CLI (`lf`) must be installed
+- LlamaFarm services must be running (`lf start`)
+- Or `OPENAI_API_KEY` environment variable set for OpenAI provider
+
+## File Structure
+
+```
+docs/website/docs/changelog/
+├── README.md       # This file (developer documentation)
+└── index.md        # Single changelog page with <details> accordion sections
+```
+
+All releases live in a single `index.md` file as `<details>` accordion sections. The latest release is expanded by default (`<details open>`), while older releases are collapsed. No individual version files are created.
+
+## Testing the System
+
+### Test with Workflow Dispatch (Recommended)
+
+You can test the workflow without creating a real release PR:
+
+1. Go to GitHub Actions → "Update Changelog Docs" workflow
+2. Click "Run workflow"
+3. Leave inputs empty (auto-detects latest version) or specify:
+   - `version`: e.g., "0.0.26"
+   - `pr_number`: If testing on an existing PR
+4. Check the workflow output and generated files
+
+### Test Locally with Manual Script
+
+```bash
+# 1. Start LlamaFarm services
+lf start
+
+# 2. Run the script
+./scripts/update-changelog-docs.sh 0.0.26
+
+# 3. Check the generated files
+ls -la docs/website/docs/changelog/
+
+# 4. Preview in Docusaurus
+cd docs/website
+npm run start
+# Visit http://localhost:3000/docs/changelog
+```
+
+## Prose Changelog Generation
+
+The human-readable release notes are generated using:
+
+**Action:** [.github/actions/prose-changelog/](../../../../.github/actions/prose-changelog/)
+
+**Process:**
+1. Extracts conventional commits from CHANGELOG.md
+2. Feeds them to `lf chat` with a specialized prompt
+3. AI transforms commits into user-friendly narrative
+4. Focuses on **user impact** and **value**, not technical details
+
+**Prompt configuration:** [.github/actions/prose-changelog/llamafarm.yaml](../../../../.github/actions/prose-changelog/llamafarm.yaml)
+
+## Docusaurus Integration
+
+Release notes appear under the "Changelog" section in the docs sidebar:
+- Changelog page: https://docs.llamafarm.dev/docs/changelog
+
+### Sidebar Configuration
+
+The sidebar in [sidebars.ts](../../sidebars.ts) links to the single changelog page:
+
+```typescript
+{
+  type: 'doc',
+  id: 'changelog/index',
+  label: 'Changelog',
+}
+```
+
+New releases are automatically added as accordion sections — no sidebar changes needed.
+
+## Troubleshooting
+
+### Workflow Failed
+
+Check the workflow logs for errors. Common issues:
+
+1. **Prose generation failed**
+   - Ensure GPU runner has LlamaFarm CLI installed
+   - Check if `lf start` is working on the runner
+   - Verify the model is downloaded
+
+2. **Git push failed**
+   - Check GH_RELEASE_TOKEN permissions
+   - Verify bot has write access to the repo
+
+3. **Version already exists**
+   - The workflow skips if the version accordion already exists in `index.md`
+   - Remove the `<details>` section from `index.md` if you want to regenerate
+
+### Manual Script Failed
+
+1. **`lf: command not found`**
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/llama-farm/llamafarm/main/install.sh | bash
+   ```
+
+2. **Generation timeout or error**
+   ```bash
+   lf start
+   lf services status
+   ```
+
+3. **Version not found**
+   - Check that the version exists in CHANGELOG.md
+   - Use exact version format (e.g., "0.0.26", not "v0.0.26")
+
+## Adding a New Release Manually
+
+If you need to add a release without the AI generation:
+
+1. Add a `<details>` accordion section to `index.md` under `## Latest Release`
+2. Close the previous latest by removing the `open` attribute from its `<details>` tag
+
+## Questions or Issues?
+
+- **Workflow issues**: Check [.github/workflows/update-changelog-docs.yml](../../../../.github/workflows/update-changelog-docs.yml)
+- **Generation issues**: Check [.github/actions/prose-changelog/](../../../../.github/actions/prose-changelog/)
+- **Docs issues**: Check `index.md` accordion sections
+
+---
+
+# Changelog
+
+Stay up to date with the latest features, improvements, and fixes in LlamaFarm.
+
+## Recent Releases
+
+<details>
+<summary><strong>v0.0.25</strong> — 2026-01-14</summary>
+
+**LlamaFarm 0.0.25: Native Tool Calling and Developer Productivity**
+
+This release focuses on improving the developer experience with better tooling, native tool calling support, and automatic file processing capabilities.
+
+### New Features
+
+#### Native Tool Calling
+
+The Universal Runtime now supports native tool calling, enabling your AI models to interact with external tools and APIs more efficiently. This is a major step forward for building agentic AI applications that can take actions in the real world.
+
+#### Automatic File Processing
+
+Files uploaded to datasets now process automatically, eliminating the manual processing step and streamlining your workflow. Just upload and go.
+
+#### Enhanced Designer Development Tools
+
+The Designer now includes comprehensive API call logging in the dev tools panel, making it easier to debug and understand how your application communicates with the backend. See every request and response in real-time.
+
+#### Streaming Model Downloads
+
+Embedding model downloads now use SSE streaming, providing real-time progress updates so you always know exactly what's happening during long downloads.
+
+#### Extended Testing Capabilities
+
+The test space now includes support for anomaly detection and classifier tests, giving you more ways to validate your AI models before deployment.
+
+### Bug Fixes
+
+- Fixed config validation error output for clearer debugging
+- Resolved install and run failures on Windows with NVIDIA GPUs
+- Removed parser fallback to prevent unexpected behavior
+- Enabled offline GGUF model loading for air-gapped environments
+
+**[Full Changelog →](https://github.com/llama-farm/llamafarm/releases/tag/v0.0.25)**
+
+</details>
+
+<details>
+<summary><strong>v0.0.24</strong> — 2026-01-06</summary>
+
+**LlamaFarm 0.0.24: Anomaly Detection**
+
+This release introduces anomaly detection capabilities to help identify outliers and unusual patterns in your data.
+
+### New Features
+
+#### Anomaly Detection
+
+The Universal Runtime now supports anomaly detection with configurable normalization methods for scoring. Whether you're monitoring for fraud, equipment failures, or data quality issues, LlamaFarm can now help identify when something doesn't look right.
+
+#### Designer UX for Anomaly Detection
+
+The Designer includes a new interface for configuring and testing anomaly detection models, making it easy to set up detection pipelines and visualize results.
+
+### Bug Fixes
+
+- Fixed anomaly and classifier UX issues in the Designer for smoother workflows
+
+**[Full Changelog →](https://github.com/llama-farm/llamafarm/releases/tag/v0.0.24)**
+
+</details>
+
+<details>
+<summary><strong>v0.0.23</strong> — 2025-12-20</summary>
+
+**LlamaFarm 0.0.23: Stability Improvements**
+
+A focused stability release addressing a critical logging issue in the Universal Runtime.
+
+### Bug Fixes
+
+- Fixed broken pipe errors caused by problematic logging in the Universal Runtime, improving reliability for long-running inference tasks
+
+**[Full Changelog →](https://github.com/llama-farm/llamafarm/releases/tag/v0.0.23)**
+
+</details>
+
+<details>
+<summary><strong>v0.0.22</strong> — 2025-12-19</summary>
+
+**LlamaFarm 0.0.22: Inference Fix**
+
+A quick bug fix release addressing an issue with logits processor handling.
+
+### Bug Fixes
+
+- Fixed logits_processor to be passed as callable instead of list, resolving inference issues with certain model configurations
+
+**[Full Changelog →](https://github.com/llama-farm/llamafarm/releases/tag/v0.0.22)**
+
+</details>
+
+<details>
+<summary><strong>v0.0.21</strong> — 2025-12-19</summary>
+
+**LlamaFarm 0.0.21: Specialized ML Models and Vision API**
+
+A feature-packed holiday release bringing specialized ML models, vision capabilities, and major Designer enhancements.
+
+### New Features
+
+#### Specialized ML Models
+
+Added support for OCR, document extraction, and anomaly detection models in the Universal Runtime. These specialized models expand what you can build with LlamaFarm beyond text generation - now you can extract text from images, parse documents, and detect anomalies.
+
+#### Vision API
+
+New vision router and model versioning for ML endpoints, enabling image understanding capabilities in your applications. Build apps that can see and understand visual content.
+
+#### Designer Improvements
+
+- **Santa's Holiday Helper Demo** - A festive demo project to help new users get started
+- **Enhanced RAG UX** - Improved retrieval strategy settings in test chat
+- **Data Enhancements** - Better tools for managing your datasets
+- **Global Project Listing** - Easily see all your projects in one place
+
+#### Cross-Platform Support
+
+Native llama-cpp bindings now included for all platforms, and Windows builds correctly include the `.exe` extension for seamless installation.
+
+### Bug Fixes
+
+- Fixed upgrade failures on Linux
+- Ensured multi-arch Linux builds work correctly
+- Fixed model unload cleanup and OpenAI message validation
+- Removed console log spam in Designer
+
+**[Full Changelog →](https://github.com/llama-farm/llamafarm/releases/tag/v0.0.21)**
+
+</details>
+
+---
+
+## Older Releases
+
+<details>
+<summary><strong>View all releases</strong></summary>
+
+<details>
+<summary><strong>v0.0.20</strong> — 2025-12-10</summary>
+
+**Auto-Start Services, RAG Stats, and Reliability Improvements**
+
+### New Features
+
+- **Auto-Start Service Flag** - Services can now start automatically when you run LlamaFarm
+- **More GGUF Download Options** - More quantization options for model downloads in Designer
+- **RAG Database Listing** - List all documents in your RAG databases
+- **RAG Statistics** - View detailed stats about your RAG setup
+- **Chunk Cleanup** - Automatically remove database chunks when files are deleted
+- **Data Processing Control** - Start and stop data processing from the API
+
+### Bug Fixes
+
+- Fixed first-run startup failures for new users
+- Improved path resolution with `~` expansion
+- Better process manager locking to prevent conflicts
+- Fixed upgrade hang caused by process stop deadlock
+- Prevented storage of failed vectors in RAG
+
+**[Full Changelog →](https://github.com/llama-farm/llamafarm/releases/tag/v0.0.20)**
+
+</details>
+
+<details>
+<summary><strong>v0.0.19</strong> — 2025-12-03</summary>
+
+**Automatic Model Downloads, Custom RAG Queries, and Reasoning Models**
+
+### New Features
+
+- **Automatic Model Download Management** - Models download automatically when needed
+- **Custom RAG Queries** - Send custom RAG queries through the chat/completions endpoint
+- **Thinking/Reasoning Model Support** - Support for models that show their reasoning process
+- **Database CRUD API** - Full create, read, update, delete operations for databases
+- **Better Day-2 UX** - Improved experience for returning users
+- **Disk Space Checking** - Check available disk space before downloading models
+- **GGUF Model Listing** - Browse available GGUF models for download
+
+### Bug Fixes
+
+- Fixed datasets endpoint trailing slash requirement
+- Improved cross-filesystem data moves
+- Fixed PDF parsing issues in RAG
+- Addressed demo timeout issues
+
+**[Full Changelog →](https://github.com/llama-farm/llamafarm/releases/tag/v0.0.19)**
+
+</details>
+
+<details>
+<summary><strong>v0.0.18</strong> — 2025-11-25</summary>
+
+**Code Signing and Advanced RAG Retrieval**
+
+### New Features
+
+- **Signed Apps** - Windows and Mac apps are now code-signed for easier installation
+- **Advanced RAG Retrieval** - Cross-encoder reranking and multi-turn RAG for better search results
+
+### Bug Fixes
+
+- Ensured service logs are always enabled
+
+**[Full Changelog →](https://github.com/llama-farm/llamafarm/releases/tag/v0.0.18)**
+
+</details>
+
+<details>
+<summary><strong>v0.0.17</strong> — 2025-11-24</summary>
+
+**Bug Fixes and Documentation**
+
+### Bug Fixes
+
+- Fixed empty prompts array for new projects
+- Added troubleshooting documentation
+- Fixed HuggingFace progress bar crashes
+
+**[Full Changelog →](https://github.com/llama-farm/llamafarm/releases/tag/v0.0.17)**
+
+</details>
+
+<details>
+<summary><strong>v0.0.16</strong> — 2025-11-23</summary>
+
+**CLI Packaging Fix**
+
+### Bug Fixes
+
+- Fixed CLI packaging issues
+
+**[Full Changelog →](https://github.com/llama-farm/llamafarm/releases/tag/v0.0.16)**
+
+</details>
+
+<details>
+<summary><strong>v0.0.15</strong> — 2025-11-22</summary>
+
+**Desktop App Launch and GGUF Model Support**
+
+### New Features
+
+- **Desktop App** - Full Electron desktop app with auto-updates and polished UI
+- **GGUF Model Support** - Run quantized GGUF models in the Universal Runtime
+- **Demo Project System** - Interactive demo projects to help new users get started
+- **Universal Event Logging** - Comprehensive observability across the platform
+- **Enhanced Tool Calling** - Improved tool calling capabilities
+- **Project Cloning** - Create new projects from existing ones
+
+### Bug Fixes
+
+- Fixed upgrade failures on Unix-like systems
+- Improved RAG integration and chat context management
+- Fixed database tab switching in Designer
+- Better dataset validation and status display
+
+**[Full Changelog →](https://github.com/llama-farm/llamafarm/releases/tag/v0.0.15)**
+
+</details>
+
+<details>
+<summary><strong>v0.0.14</strong> — 2025-11-13</summary>
+
+**Database Strategies and RAG Improvements**
+
+### New Features
+
+- RAG query stats showing size information
+- Database embedding and retrieval strategies in Designer
+
+### Bug Fixes
+
+- Fixed build chat errors
+- Fixed file drop dataset selection
+
+**[Full Changelog →](https://github.com/llama-farm/llamafarm/releases/tag/v0.0.14)**
+
+</details>
+
+<details>
+<summary><strong>v0.0.13</strong> — 2025-11-11</summary>
+
+**Version Number Fix**
+
+### Bug Fixes
+
+- CLI now displays correct version number
+
+**[Full Changelog →](https://github.com/llama-farm/llamafarm/releases/tag/v0.0.13)**
+
+</details>
+
+<details>
+<summary><strong>v0.0.12</strong> — 2025-11-11</summary>
+
+**Project Management and Config Editor**
+
+### New Features
+
+- **Delete Projects** - Remove projects from CLI and API
+- **Config Editor Enhancements** - Copy button, search, anchor points, unsaved changes prompts
+- **Embedding Strategies API** - Configure embedding strategies via API
+- **MCP Server Config** - Add MCP server configuration to runtime
+- **Project Context Provider** - Better project context management
+
+**[Full Changelog →](https://github.com/llama-farm/llamafarm/releases/tag/v0.0.12)**
+
+</details>
+
+<details>
+<summary><strong>v0.0.11 and earlier</strong></summary>
+
+For releases v0.0.11 and earlier, please see the [full changelog on GitHub](https://github.com/llama-farm/llamafarm/blob/main/CHANGELOG.md).
+
+</details>
+
+</details>
+
+---
+
+## About These Release Notes
+
+These release notes are generated from our conventional commit history. For the complete structured changelog with commit links and PR references, see the [CHANGELOG.md](https://github.com/llama-farm/llamafarm/blob/main/CHANGELOG.md) on GitHub.
+
+## Stay Updated
+
+- **GitHub Releases**: [github.com/llama-farm/llamafarm/releases](https://github.com/llama-farm/llamafarm/releases)
+- **Reddit**: [r/LlamaFarm](https://www.reddit.com/r/LlamaFarm/)
+- **Discord**: [Join our community](https://discord.gg/jtChvg8T)
+
+---
+
 # NVIDIA Jetson
 
 LlamaFarm runs natively on NVIDIA Jetson devices (Orin, Xavier, TX2, Nano) with CUDA acceleration. This guide covers setup, optimization, and troubleshooting for Jetson deployments.
