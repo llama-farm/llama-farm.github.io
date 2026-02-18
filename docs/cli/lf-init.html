@@ -11,7 +11,7 @@
 
 
 <script src="/gtm-init.js" async></script><link rel="stylesheet" href="/assets/css/styles.f25236e7.css">
-<script src="/assets/js/runtime~main.0d89e647.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.4c7d765c.js" defer="defer"></script>
 <script src="/assets/js/main.5742ad8d.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -32,6 +32,7 @@
 <li class="">Ensures the API server is reachable (auto-starts locally if needed).</li>
 <li class="">Creates the target directory (if missing) and writes <code>llamafarm.yaml</code> using the server’s <code>project.config</code> response.</li>
 <li class="">Fails if a LlamaFarm config already exists in the directory.</li>
+<li class="">Scaffolds <code>schemas/example.py</code> for structured output schemas.</li>
 </ul>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="example">Example<a href="#example" class="hash-link" aria-label="Direct link to Example" title="Direct link to Example" translate="no">​</a></h2>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">lf init customer-support</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cd customer-support</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cat llamafarm.yaml</span><br></span></code></pre></div></div>

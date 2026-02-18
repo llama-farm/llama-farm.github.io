@@ -1756,6 +1756,7 @@ lf init [path] [flags]
 - Ensures the API server is reachable (auto-starts locally if needed).
 - Creates the target directory (if missing) and writes `llamafarm.yaml` using the server’s `project.config` response.
 - Fails if a LlamaFarm config already exists in the directory.
+- Scaffolds `schemas/example.py` for structured output schemas.
 
 ## Example
 
@@ -1860,12 +1861,14 @@ If you omit `namespace/project`, the CLI resolves them from `llamafarm.yaml`.
 | `--rag-top-k` | Adjust the number of results (default 5). |
 | `--rag-score-threshold` | Minimum similarity score for results. |
 | `--curl` | Print the sanitized `curl` request instead of executing. |
+| `--structured` | Use the configured `schema` for structured output (non-streaming). |
 
 ## Behaviour
 
 - Automatically starts the server if needed.
 - Filters client/error messages from the transcript before sending.
-- Streams responses; exit code is non-zero if the API returns an error.
+- Streams responses by default; exit code is non-zero if the API returns an error.
+- When using `--structured`, streaming is disabled to match server requirements.
 - Redacts authorization headers when using `--curl`.
 
 ## Examples
@@ -1891,6 +1894,9 @@ lf chat --database main_db --retrieval-strategy hybrid_search "Find biologics re
 
 # Combine model selection with RAG
 lf chat --model lemon --database main_db "Query with specific model and database"
+
+# Structured output (requires `schema` in llamafarm.yaml)
+lf chat --structured "Summarize this into the configured schema"
 ```
 
 ## Sessions
@@ -2447,6 +2453,7 @@ Every LlamaFarm project is defined by a single file: `llamafarm.yaml`. The serve
 version: v1
 name: my-project
 namespace: default
+schema: schemas/example.py::Person
 runtime: { ... }
 prompts: [...]
 rag: { ... }
@@ -2456,11 +2463,12 @@ voice: { ... }
 
 ### Metadata
 
-| Field       | Type   | Required  | Notes                                              |
-| ----------- | ------ | --------- | -------------------------------------------------- |
-| `version`   | string | ✅ (`v1`) | Schema version.                                    |
-| `name`      | string | ✅        | Project identifier.                                |
-| `namespace` | string | ✅        | Grouping for isolation (matches server namespace). |
+| Field       | Type   | Required  | Notes                                                       |
+| ----------- | ------ | --------- | ----------------------------------------------------------- |
+| `version`   | string | ✅ (`v1`) | Schema version.                                             |
+| `name`      | string | ✅        | Project identifier.                                         |
+| `namespace` | string | ✅        | Grouping for isolation (matches server namespace).          |
+| `schema`    | string | Optional  | Pydantic schema for structured outputs (`schemas/...::Class`) |
 
 ### Runtime
 
@@ -2562,6 +2570,34 @@ The resolution priority for RAG parameters is:
 1. **Request parameters** (highest priority) — `rag_enabled`, `database` in the API call
 2. **Model defaults** — `rag_enabled`, `target_database` on the model config
 3. **Project defaults** — `rag.default_database`, or first database when databases exist
+
+### Structured Outputs
+
+Structured outputs require two settings:
+
+1. **Top-level schema**: Point to a Pydantic model inside your project’s `schemas/` directory.
+2. **Instructor mode**: Set `instructor_mode` on the target model (for example, `tools` or `json`).
+
+Example:
+
+```yaml
+schema: schemas/example.py::Person
+
+runtime:
+  models:
+    - name: vllm-model
+      provider: openai
+      model: qwen2.5:7b
+      base_url: http://localhost:8000/v1
+      api_key: ${VLLM_API_KEY}
+      instructor_mode: tools
+      default: true
+```
+
+Notes:
+
+- Schema paths must be relative, use a `.py` file, and live under `schemas/`.
+- Streaming is not supported when `schema` is configured. Use non-streaming requests (for example, `lf chat --structured`).
 
 **extra_body fields (Universal runtime):**
 
@@ -3172,6 +3208,7 @@ See [Lemonade Quickstart](../models#quick-setup) for detailed setup.
 version: v1
 name: llm-gateway
 namespace: enterprise
+schema: schemas/compliance.py::ComplianceSummary
 
 runtime:
   default_model: vllm-model
