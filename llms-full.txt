@@ -10980,15 +10980,19 @@ Beyond text generation, the Universal Runtime provides specialized ML capabiliti
 
 See the detailed guides:
 - [Specialized ML Models](./specialized-ml.md) - OCR, document extraction, classification, NER, reranking
+- [Vision Pipeline](./vision.md) - YOLO object detection, CLIP classification, cascade streaming, training, ONNX export
 - [Anomaly Detection Guide](./anomaly-detection.md) - Batch anomaly detection for training and scoring
 - [Streaming Anomaly Detection](./streaming-anomaly-detection.md) - Real-time streaming with auto-retraining
+- [ML Addons](./ml-addons.md) - Time-series forecasting (Chronos, ARIMA), ADTK anomaly detection, data drift monitoring, CatBoost, SHAP explainability
 - [Polars Buffer API](./polars-buffers.md) - High-performance data buffers for feature engineering
 
 ## Next Steps
 
 - [Specialized ML Models](./specialized-ml.md) – OCR, document extraction, and more.
+- [Vision Pipeline](./vision.md) – object detection, classification, and streaming.
 - [Anomaly Detection](./anomaly-detection.md) – detect outliers in your data.
 - [Streaming Anomaly Detection](./streaming-anomaly-detection.md) – real-time streaming detection.
+- [ML Addons](./ml-addons.md) – time-series forecasting, drift detection, CatBoost, SHAP.
 - [Polars Buffer API](./polars-buffers.md) – direct access to Polars data buffers.
 - [Configuration Guide](../configuration/index.md) – runtime schema details.
 - [Extending runtimes](../extending/index.md#extend-runtimes) – step-by-step provider integration.
@@ -11011,6 +11015,12 @@ Beyond text generation, the Universal Runtime provides a comprehensive suite of 
 | [Named Entity Recognition](#named-entity-recognition-ner) | `POST /v1/ner` | Extract people, places, organizations |
 | [Reranking](#reranking-cross-encoder) | `POST /v1/rerank` | Improve RAG retrieval accuracy |
 | [Anomaly Detection](#anomaly-detection) | `POST /v1/ml/anomaly/*` | Detect outliers in numeric/mixed data |
+| [Vision Pipeline](./vision.md) | `POST /v1/vision/*` | YOLO detection, CLIP classification, cascade streaming |
+| [Time-Series Forecasting](./ml-addons.md#time-series-forecasting) | `POST /v1/timeseries/*` | ARIMA, Chronos, Exponential Smoothing |
+| [ADTK Anomaly Detection](./ml-addons.md#time-series-anomaly-detection-adtk) | `POST /v1/adtk/*` | Level shifts, spikes, seasonal anomalies |
+| [Data Drift Detection](./ml-addons.md#data-drift-detection) | `POST /v1/drift/*` | KS, Chi-squared, MMD drift monitoring |
+| [CatBoost](./ml-addons.md#catboost-gradient-boosting) | `POST /v1/catboost/*` | Gradient boosting with categorical features |
+| [SHAP Explainability](./ml-addons.md#shap-explainability) | `POST /v1/explain/*` | Feature contributions for any ML model |
 
 ## Starting the Universal Runtime
 
@@ -12826,8 +12836,33 @@ LF_DATA_DIR=/path/to/llamafarm/data
 
 ---
 
+## SHAP Explainability
+
+Add `explain: true` to any anomaly detection call to get SHAP explanations showing which features drove each anomaly.
+
+```bash
+curl -X POST http://localhost:14345/v1/ml/anomaly/detect \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "sensor-monitor",
+    "data": [[22.0, 100], [5.0, 500], [50.0, 10]],
+    "explain": true,
+    "feature_names": ["temperature", "pressure"]
+  }'
+```
+
+Each anomaly in the response includes SHAP contributions showing the direction and magnitude of each feature's influence. This uses TreeExplainer for Isolation Forest models and KernelExplainer for other backends.
+
+For standalone SHAP explanations or global feature importance, see the [SHAP Explainability section](./ml-addons.md#shap-explainability) in the ML Addons guide.
+
+**TIP: Time-Series Anomaly Detection**
+For detecting temporal patterns like level shifts, seasonal violations, and volatility changes, see the [ADTK addon](./ml-addons.md#time-series-anomaly-detection-adtk). ADTK complements point anomaly detection by understanding time-series context.
+
+---
+
 ## Next Steps
 
+- [ML Addons Guide](./ml-addons.md) - ADTK time-series anomalies, SHAP explainability, drift detection
 - [Specialized ML Models](./specialized-ml.md) - Overview of all ML endpoints
 - [Universal Runtime](./index.md#universal-runtime) - General runtime configuration
 - [API Reference](../api/index.md) - Full API documentation
@@ -15913,6 +15948,726 @@ See `docs/website/mcp/` for the full implementation.
 
 ---
 
+# ML Addons Guide
+
+ML Addons extend the Universal Runtime with specialized machine learning capabilities. Each addon is installed separately to keep the base runtime lightweight.
+
+## Installing Addons
+
+```bash
+# Install individual addons
+lf addons install timeseries
+lf addons install adtk
+lf addons install catboost
+lf addons install drift
+
+# Or install dependencies manually
+pip install darts>=0.29.0 chronos-forecasting>=1.2.0   # timeseries
+pip install adtk>=0.6.2                                 # adtk
+pip install catboost>=1.2.0                             # catboost
+pip install alibi-detect>=0.12.0                        # drift
+```
+
+---
+
+## Time-Series Forecasting
+
+Forecast future values using classical methods (ARIMA, Exponential Smoothing, Theta) or zero-shot foundation models (Amazon Chronos).
+
+### Available Backends
+
+| Backend | Training Required | Confidence Intervals | Speed | Description |
+|---------|-------------------|---------------------|-------|-------------|
+| `arima` | Yes | Yes | Fast | Classical ARIMA model |
+| `exponential_smoothing` | Yes | Yes | Fast | Holt-Winters exponential smoothing |
+| `theta` | Yes | Yes | Fast | Theta forecasting method |
+| `chronos` | No (zero-shot) | Yes | Slow | Amazon Chronos foundation model |
+| `chronos-bolt` | No (zero-shot) | Yes | Medium | Faster Chronos variant |
+
+### List Backends
+
+```bash
+curl http://localhost:11540/v1/timeseries/backends
+```
+
+### Fit a Model
+
+```bash
+curl -X POST http://localhost:11540/v1/timeseries/fit \
+  -H "Content-Type: application/json" \
+  -d '{
+    "backend": "arima",
+    "model": "sales-forecast",
+    "data": [
+      {"timestamp": "2024-01-01", "value": 100},
+      {"timestamp": "2024-01-02", "value": 105},
+      {"timestamp": "2024-01-03", "value": 98},
+      {"timestamp": "2024-01-04", "value": 110},
+      {"timestamp": "2024-01-05", "value": 103}
+    ],
+    "frequency": "D",
+    "description": "Daily sales forecast"
+  }'
+```
+
+Response:
+```json
+{
+  "model": "sales-forecast",
+  "backend": "arima",
+  "saved_path": "~/.llamafarm/models/timeseries/sales-forecast_arima.joblib",
+  "training_time_ms": 234.5,
+  "samples_fitted": 5,
+  "description": "Daily sales forecast"
+}
+```
+
+### Predict
+
+```bash
+# From a fitted model
+curl -X POST http://localhost:11540/v1/timeseries/predict \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "sales-forecast",
+    "horizon": 7,
+    "confidence_level": 0.95
+  }'
+```
+
+Response:
+```json
+{
+  "model_id": "sales-forecast",
+  "backend": "arima",
+  "predictions": [
+    {"timestamp": "2024-01-06", "value": 107.2, "lower": 95.1, "upper": 119.3},
+    {"timestamp": "2024-01-07", "value": 104.8, "lower": 90.5, "upper": 119.1}
+  ],
+  "fit_time_ms": 0.0,
+  "predict_time_ms": 12.3
+}
+```
+
+### Zero-Shot Forecasting (Chronos)
+
+No training needed — just provide historical data:
+
+```bash
+curl -X POST http://localhost:11540/v1/timeseries/predict \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "chronos",
+    "horizon": 7,
+    "data": [
+      {"timestamp": "2024-01-01", "value": 100},
+      {"timestamp": "2024-01-02", "value": 105},
+      {"timestamp": "2024-01-03", "value": 98}
+    ],
+    "confidence_level": 0.9
+  }'
+```
+
+### Manage Models
+
+```bash
+# List saved models
+curl http://localhost:11540/v1/timeseries/models
+
+# Load a specific model
+curl -X POST http://localhost:11540/v1/timeseries/load \
+  -H "Content-Type: application/json" \
+  -d '{"model": "sales-forecast"}'
+
+# Load latest version
+curl -X POST http://localhost:11540/v1/timeseries/load \
+  -H "Content-Type: application/json" \
+  -d '{"model": "sales-forecast-latest"}'
+
+# Delete a model
+curl -X DELETE http://localhost:11540/v1/timeseries/models/sales-forecast
+```
+
+### Python Example
+
+```python
+
+BASE = "http://localhost:11540"
+
+# Fit
+requests.post(f"{BASE}/v1/timeseries/fit", json={
+    "backend": "exponential_smoothing",
+    "model": "sensor-temp",
+    "data": [{"timestamp": f"2024-01-{d:02d}", "value": v}
+             for d, v in enumerate([22.1, 23.5, 21.8, 24.2, 22.7], 1)],
+    "frequency": "D"
+})
+
+# Predict
+resp = requests.post(f"{BASE}/v1/timeseries/predict", json={
+    "model": "sensor-temp",
+    "horizon": 3,
+    "confidence_level": 0.95
+})
+
+for p in resp.json()["predictions"]:
+    print(f"{p['timestamp']}: {p['value']:.1f} [{p['lower']:.1f}, {p['upper']:.1f}]")
+```
+
+---
+
+## Time-Series Anomaly Detection (ADTK)
+
+Detect temporal patterns that point anomaly detectors miss: level shifts, seasonal violations, spikes, volatility changes, and stuck values.
+
+### Available Detectors
+
+| Detector | Training | Description |
+|----------|----------|-------------|
+| `level_shift` | Yes | Sudden baseline changes |
+| `spike` | No | IQR-based outlier spikes/dips |
+| `seasonal` | Yes | Seasonal pattern violations |
+| `volatility` | Yes | Variance/volatility shifts |
+| `persist` | No | Stuck/constant value detection |
+| `threshold` | No | Simple threshold-based detection |
+
+### List Detectors
+
+```bash
+curl http://localhost:11540/v1/adtk/detectors
+```
+
+### Fit a Detector
+
+```bash
+curl -X POST http://localhost:11540/v1/adtk/fit \
+  -H "Content-Type: application/json" \
+  -d '{
+    "detector": "level_shift",
+    "model": "server-baseline",
+    "data": [
+      {"timestamp": "2024-01-01T00:00:00", "value": 100},
+      {"timestamp": "2024-01-01T01:00:00", "value": 102},
+      {"timestamp": "2024-01-01T02:00:00", "value": 98},
+      {"timestamp": "2024-01-01T03:00:00", "value": 101}
+    ],
+    "params": {"window": 5},
+    "description": "Server CPU baseline"
+  }'
+```
+
+Response:
+```json
+{
+  "model": "server-baseline",
+  "detector": "level_shift",
+  "saved_path": "~/.llamafarm/models/adtk/server-baseline_level_shift.joblib",
+  "training_time_ms": 15.2,
+  "samples_fitted": 4,
+  "requires_training": true
+}
+```
+
+### Detect Anomalies
+
+```bash
+curl -X POST http://localhost:11540/v1/adtk/detect \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "server-baseline",
+    "detector": "level_shift",
+    "data": [
+      {"timestamp": "2024-01-01T04:00:00", "value": 100},
+      {"timestamp": "2024-01-01T05:00:00", "value": 150},
+      {"timestamp": "2024-01-01T06:00:00", "value": 155},
+      {"timestamp": "2024-01-01T07:00:00", "value": 148}
+    ]
+  }'
+```
+
+Response:
+```json
+{
+  "model": "server-baseline",
+  "detector": "level_shift",
+  "anomalies": [
+    {
+      "timestamp": "2024-01-01T05:00:00",
+      "value": 150.0,
+      "anomaly_type": "level_shift",
+      "score": 0.95
+    }
+  ],
+  "total_points": 4,
+  "anomaly_count": 1,
+  "detection_time_ms": 3.2
+}
+```
+
+### Ad-Hoc Detection (No Saved Model)
+
+Use detectors without fitting first (for detectors that don't require training):
+
+```bash
+curl -X POST http://localhost:11540/v1/adtk/detect \
+  -H "Content-Type: application/json" \
+  -d '{
+    "detector": "spike",
+    "data": [
+      {"timestamp": "2024-01-01T00:00:00", "value": 10},
+      {"timestamp": "2024-01-01T01:00:00", "value": 12},
+      {"timestamp": "2024-01-01T02:00:00", "value": 500},
+      {"timestamp": "2024-01-01T03:00:00", "value": 11}
+    ]
+  }'
+```
+
+### Manage Models
+
+```bash
+# List saved ADTK models
+curl http://localhost:11540/v1/adtk/models
+
+# Load a saved model
+curl -X POST http://localhost:11540/v1/adtk/load \
+  -H "Content-Type: application/json" \
+  -d '{"model": "server-baseline"}'
+
+# Delete a model
+curl -X DELETE http://localhost:11540/v1/adtk/models/server-baseline
+```
+
+**TIP: ADTK vs Standard Anomaly Detection**
+Use [standard anomaly detection](./anomaly-detection.md) (`/v1/ml/anomaly/*`) for point anomalies in tabular data. Use ADTK for **temporal patterns** — level shifts, seasonal deviations, and volatility changes that require time-series context.
+
+---
+
+## Data Drift Detection
+
+Monitor production data for distribution drift using statistical tests. Detect when incoming data has shifted from your training distribution.
+
+### Available Detectors
+
+| Detector | Type | Description |
+|----------|------|-------------|
+| `ks` | Univariate | Kolmogorov-Smirnov test for numeric features |
+| `chi2` | Univariate | Chi-squared test for categorical features |
+| `mmd` | Multivariate | Maximum Mean Discrepancy for multi-feature drift |
+
+### List Detectors
+
+```bash
+curl http://localhost:11540/v1/drift/detectors
+```
+
+### Train Reference Distribution
+
+```bash
+curl -X POST http://localhost:11540/v1/drift/fit \
+  -H "Content-Type: application/json" \
+  -d '{
+    "detector": "ks",
+    "model": "model-input-monitor",
+    "reference_data": [
+      [1.0, 2.0, 3.0],
+      [1.1, 2.1, 2.9],
+      [0.9, 1.9, 3.1],
+      [1.2, 2.2, 2.8]
+    ],
+    "feature_names": ["feature_a", "feature_b", "feature_c"],
+    "description": "Production model input baseline"
+  }'
+```
+
+Response:
+```json
+{
+  "model": "model-input-monitor",
+  "detector": "ks",
+  "saved_path": "~/.llamafarm/models/drift/model-input-monitor_ks.joblib",
+  "training_time_ms": 8.5,
+  "reference_size": 4,
+  "n_features": 3
+}
+```
+
+### Detect Drift
+
+```bash
+curl -X POST http://localhost:11540/v1/drift/detect \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "model-input-monitor",
+    "data": [
+      [5.0, 8.0, 1.0],
+      [4.8, 7.5, 0.5],
+      [5.2, 8.2, 1.2]
+    ]
+  }'
+```
+
+Response:
+```json
+{
+  "model": "model-input-monitor",
+  "detector": "ks",
+  "result": {
+    "is_drift": true,
+    "p_value": 0.002,
+    "threshold": 0.05,
+    "distance": 0.85,
+    "p_values": [0.001, 0.003, 0.01]
+  },
+  "detection_time_ms": 5.1
+}
+```
+
+### Monitor Status
+
+```bash
+# Check detector status
+curl http://localhost:11540/v1/drift/status/model-input-monitor
+
+# Reset detector
+curl -X POST http://localhost:11540/v1/drift/reset/model-input-monitor
+```
+
+### Manage Models
+
+```bash
+# List drift models
+curl http://localhost:11540/v1/drift/models
+
+# Load a saved model
+curl -X POST http://localhost:11540/v1/drift/load \
+  -H "Content-Type: application/json" \
+  -d '{"model": "model-input-monitor"}'
+
+# Delete a model
+curl -X DELETE http://localhost:11540/v1/drift/models/model-input-monitor
+```
+
+### Python Example
+
+```python
+
+BASE = "http://localhost:11540"
+
+# Train on reference data
+requests.post(f"{BASE}/v1/drift/fit", json={
+    "detector": "ks",
+    "model": "api-inputs",
+    "reference_data": training_features.tolist(),
+    "feature_names": ["latency", "payload_size", "error_rate"]
+})
+
+# Check new batch for drift
+resp = requests.post(f"{BASE}/v1/drift/detect", json={
+    "model": "api-inputs",
+    "data": new_batch.tolist()
+})
+
+result = resp.json()["result"]
+if result["is_drift"]:
+    print(f"⚠️ Drift detected! p-value: {result['p_value']:.4f}")
+```
+
+---
+
+## CatBoost Gradient Boosting
+
+Train gradient boosting models with native categorical feature support, incremental learning, and feature importance.
+
+### Capabilities
+
+```bash
+curl http://localhost:11540/v1/catboost/info
+```
+
+### Train a Model
+
+```bash
+curl -X POST http://localhost:11540/v1/catboost/fit \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model_id": "churn-predictor",
+    "model_type": "classifier",
+    "data": [
+      [25, "premium", 12],
+      [45, "basic", 3],
+      [35, "premium", 24],
+      [28, "basic", 1]
+    ],
+    "labels": [0, 1, 0, 1],
+    "feature_names": ["age", "plan", "months"],
+    "cat_features": [1],
+    "iterations": 100,
+    "learning_rate": 0.1,
+    "depth": 6,
+    "validation_fraction": 0.2
+  }'
+```
+
+Response:
+```json
+{
+  "model_id": "churn-predictor",
+  "model_type": "classifier",
+  "samples_fitted": 3,
+  "n_features": 3,
+  "iterations": 100,
+  "best_iteration": 85,
+  "classes": [0, 1],
+  "saved_path": "~/.llamafarm/models/catboost/churn-predictor.joblib",
+  "fit_time_ms": 456.2
+}
+```
+
+### Predict
+
+```bash
+curl -X POST http://localhost:11540/v1/catboost/predict \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model_id": "churn-predictor",
+    "data": [[30, "premium", 18], [50, "basic", 2]],
+    "return_proba": true
+  }'
+```
+
+Response:
+```json
+{
+  "model_id": "churn-predictor",
+  "predictions": [
+    {"sample_index": 0, "prediction": 0, "probabilities": {"0": 0.85, "1": 0.15}},
+    {"sample_index": 1, "prediction": 1, "probabilities": {"0": 0.25, "1": 0.75}}
+  ],
+  "predict_time_ms": 2.1
+}
+```
+
+### Incremental Learning
+
+Update a model with new data without retraining from scratch:
+
+```bash
+curl -X POST http://localhost:11540/v1/catboost/update \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model_id": "churn-predictor",
+    "data": [[33, "premium", 6], [41, "basic", 8]],
+    "labels": [0, 1]
+  }'
+```
+
+Response:
+```json
+{
+  "model_id": "churn-predictor",
+  "samples_added": 2,
+  "trees_before": 100,
+  "trees_after": 150,
+  "update_time_ms": 123.4
+}
+```
+
+### Feature Importance
+
+```bash
+curl http://localhost:11540/v1/catboost/churn-predictor/importance
+```
+
+Response:
+```json
+{
+  "model_id": "churn-predictor",
+  "importances": [
+    {"feature": "months", "importance": 45.2},
+    {"feature": "plan", "importance": 32.8},
+    {"feature": "age", "importance": 22.0}
+  ],
+  "importance_type": "FeatureImportance"
+}
+```
+
+### Manage Models
+
+```bash
+# List models
+curl http://localhost:11540/v1/catboost/models
+
+# Load a model
+curl -X POST http://localhost:11540/v1/catboost/load \
+  -H "Content-Type: application/json" \
+  -d '{"model_id": "churn-predictor"}'
+
+# Delete a model
+curl -X DELETE http://localhost:11540/v1/catboost/churn-predictor
+```
+
+---
+
+## SHAP Explainability
+
+Generate SHAP (SHapley Additive exPlanations) explanations for any ML model predictions. Understand which features drive model decisions.
+
+### Standalone SHAP Explanation
+
+```bash
+curl -X POST http://localhost:11540/v1/explain/shap \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model_type": "catboost",
+    "model_id": "churn-predictor",
+    "data": [[30, 1, 18], [50, 0, 2]],
+    "feature_names": ["age", "plan", "months"],
+    "top_k": 3,
+    "generate_narrative": true
+  }'
+```
+
+Response:
+```json
+{
+  "model_type": "catboost",
+  "model_id": "churn-predictor",
+  "explainer_type": "tree",
+  "explanations": [
+    {
+      "sample_index": 0,
+      "base_value": 0.5,
+      "prediction": 0.15,
+      "contributions": [
+        {"feature": "months", "value": 18, "shap_value": -0.25, "direction": "decreases"},
+        {"feature": "plan", "value": 1, "shap_value": -0.08, "direction": "decreases"},
+        {"feature": "age", "value": 30, "shap_value": -0.02, "direction": "decreases"}
+      ]
+    }
+  ],
+  "narrative": {
+    "summary": "The prediction is primarily driven by high tenure (18 months), which strongly decreases churn risk.",
+    "details": ["months=18 contributes -0.25 to the prediction", "..."]
+  },
+  "explain_time_ms": 45.3
+}
+```
+
+### Global Feature Importance
+
+```bash
+curl -X POST http://localhost:11540/v1/explain/importance \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model_type": "anomaly",
+    "model_id": "sensor-monitor",
+    "data": [[22.1, 100], [23.5, 105], [21.8, 98]],
+    "feature_names": ["temperature", "pressure"]
+  }'
+```
+
+### SHAP with Anomaly Detection
+
+Add `explain: true` to any anomaly detection call to get SHAP explanations inline:
+
+```bash
+curl -X POST http://localhost:14345/v1/ml/anomaly/detect \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "sensor-monitor",
+    "data": [[22.0, 100], [5.0, 500], [50.0, 10]],
+    "explain": true,
+    "feature_names": ["temperature", "pressure"]
+  }'
+```
+
+The response includes SHAP explanations alongside each anomaly, showing which features caused the anomaly flag.
+
+### Available Explainer Types
+
+```bash
+curl http://localhost:11540/v1/explain/explainers
+```
+
+| Explainer | Description | Best For |
+|-----------|-------------|----------|
+| `tree` | TreeExplainer | CatBoost, Isolation Forest, XGBoost |
+| `linear` | LinearExplainer | Linear models, One-Class SVM |
+| `kernel` | KernelExplainer | Any model (slower, model-agnostic) |
+
+The explainer type is auto-detected based on the model.
+
+---
+
+## Addon API Reference
+
+### Timeseries Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/v1/timeseries/backends` | GET | List forecasting backends |
+| `/v1/timeseries/fit` | POST | Train a forecaster |
+| `/v1/timeseries/predict` | POST | Generate predictions |
+| `/v1/timeseries/load` | POST | Load a saved model |
+| `/v1/timeseries/models` | GET | List saved models |
+| `/v1/timeseries/models/{name}` | GET | Get model info |
+| `/v1/timeseries/models/{name}` | DELETE | Delete a model |
+
+### ADTK Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/v1/adtk/detectors` | GET | List detector types |
+| `/v1/adtk/fit` | POST | Fit a detector |
+| `/v1/adtk/detect` | POST | Detect anomalies |
+| `/v1/adtk/load` | POST | Load a saved model |
+| `/v1/adtk/models` | GET | List saved models |
+| `/v1/adtk/models/{name}` | DELETE | Delete a model |
+
+### Drift Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/v1/drift/detectors` | GET | List detector types |
+| `/v1/drift/fit` | POST | Fit on reference data |
+| `/v1/drift/detect` | POST | Check for drift |
+| `/v1/drift/load` | POST | Load a saved model |
+| `/v1/drift/status/{name}` | GET | Get detector status |
+| `/v1/drift/reset/{name}` | POST | Reset a detector |
+| `/v1/drift/models` | GET | List saved models |
+| `/v1/drift/models/{name}` | DELETE | Delete a model |
+
+### CatBoost Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/v1/catboost/info` | GET | CatBoost capabilities |
+| `/v1/catboost/fit` | POST | Train a model |
+| `/v1/catboost/predict` | POST | Make predictions |
+| `/v1/catboost/update` | POST | Incremental update |
+| `/v1/catboost/load` | POST | Load a model |
+| `/v1/catboost/models` | GET | List models |
+| `/v1/catboost/{id}` | DELETE | Delete a model |
+| `/v1/catboost/{id}/importance` | GET | Feature importance |
+
+### Explainability Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/v1/explain/explainers` | GET | List explainer types |
+| `/v1/explain/shap` | POST | SHAP explanation |
+| `/v1/explain/importance` | POST | Global feature importance |
+
+---
+
+## Next Steps
+
+- [Anomaly Detection Guide](./anomaly-detection.md) — Point anomaly detection with SHAP integration
+- [Vision Pipeline](./vision.md) — Object detection, classification, and streaming
+- [Specialized ML Models](./specialized-ml.md) — OCR, NER, classification, and more
+
+---
+
 # Polars Buffer API
 
 LlamaFarm provides direct access to high-performance Polars-based data buffers for advanced streaming and feature engineering use cases.
@@ -16928,6 +17683,482 @@ curl -X POST http://localhost:14345/v1/ml/anomaly/stream/my-detector/reset
 - [Polars Buffer API](./polars-buffers.md) - Direct access to data buffers
 - [Anomaly Detection Guide](./anomaly-detection.md) - Batch anomaly detection
 - [Use Cases: IoT Sensor Monitoring](../use-cases/iot-sensor-monitoring.md) - Complete example
+
+---
+
+# Vision Pipeline Guide
+
+The Universal Runtime provides a complete computer vision pipeline with YOLO object detection, CLIP zero-shot classification, cascade streaming inference, model training, and ONNX export.
+
+## Overview
+
+The vision pipeline supports:
+
+- **YOLO Object Detection**: Detect and locate objects in images with bounding boxes
+- **CLIP Classification**: Zero-shot image classification with custom class labels
+- **Cascade Streaming**: Multi-model chains that escalate when confidence is low
+- **Training**: Fine-tune detection and classification models on custom datasets
+- **Model Management**: Save, load, list, and export models (ONNX, CoreML, TensorRT)
+
+## Quick Start
+
+### Detect Objects
+
+```bash
+# Base64-encode an image and detect objects
+IMAGE=$(base64 -w0 photo.jpg)
+
+curl -X POST http://localhost:11540/v1/vision/detect \
+  -H "Content-Type: application/json" \
+  -d '{
+    "image": "'$IMAGE'",
+    "model": "yolov8n",
+    "confidence_threshold": 0.5
+  }'
+```
+
+Response:
+```json
+{
+  "detections": [
+    {
+      "box": {"x1": 120.5, "y1": 80.2, "x2": 350.8, "y2": 420.1},
+      "class_name": "person",
+      "class_id": 0,
+      "confidence": 0.92
+    },
+    {
+      "box": {"x1": 400.0, "y1": 200.0, "x2": 550.0, "y2": 380.0},
+      "class_name": "dog",
+      "class_id": 16,
+      "confidence": 0.87
+    }
+  ],
+  "model": "yolov8n",
+  "inference_time_ms": 45.2
+}
+```
+
+### Classify Images
+
+```bash
+curl -X POST http://localhost:11540/v1/vision/classify \
+  -H "Content-Type: application/json" \
+  -d '{
+    "image": "'$IMAGE'",
+    "model": "clip-vit-base",
+    "classes": ["cat", "dog", "bird", "car", "person"],
+    "top_k": 3
+  }'
+```
+
+Response:
+```json
+{
+  "class_name": "dog",
+  "class_id": 1,
+  "confidence": 0.89,
+  "all_scores": {
+    "cat": 0.05,
+    "dog": 0.89,
+    "bird": 0.02,
+    "car": 0.01,
+    "person": 0.03
+  },
+  "model": "clip-vit-base",
+  "inference_time_ms": 32.1
+}
+```
+
+---
+
+## Object Detection (YOLO)
+
+### `POST /v1/vision/detect`
+
+Detect objects in an image using YOLO models. Returns bounding boxes with class labels and confidence scores.
+
+**Request:**
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `image` | string | Yes | — | Base64-encoded image |
+| `model` | string | No | `yolov8n` | YOLO model variant |
+| `confidence_threshold` | float | No | `0.5` | Minimum confidence (0.0–1.0) |
+| `classes` | string[] | No | all | Filter to specific class names |
+
+**Available Models:**
+
+| Model | Speed | Accuracy | Use Case |
+|-------|-------|----------|----------|
+| `yolov8n` | Fastest | Good | Real-time, edge devices |
+| `yolov8s` | Fast | Better | Balanced performance |
+| `yolov8m` | Medium | High | General purpose |
+| `yolov8l` | Slow | Higher | High accuracy needs |
+| `yolov8x` | Slowest | Highest | Maximum accuracy |
+
+### Python Example
+
+```python
+
+with open("photo.jpg", "rb") as f:
+    image_b64 = base64.b64encode(f.read()).decode()
+
+resp = requests.post("http://localhost:11540/v1/vision/detect", json={
+    "image": image_b64,
+    "model": "yolov8n",
+    "confidence_threshold": 0.5,
+    "classes": ["person", "car"]
+})
+
+for det in resp.json()["detections"]:
+    print(f"{det['class_name']}: {det['confidence']:.2f} at ({det['box']['x1']:.0f},{det['box']['y1']:.0f})")
+```
+
+---
+
+## Zero-Shot Classification (CLIP)
+
+### `POST /v1/vision/classify`
+
+Classify images into arbitrary categories without training using CLIP. You provide the class labels at inference time.
+
+**Request:**
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `image` | string | Yes | — | Base64-encoded image |
+| `model` | string | No | `clip-vit-base` | CLIP model variant |
+| `classes` | string[] | Yes | — | Class labels for zero-shot classification |
+| `top_k` | int | No | `5` | Number of top results (1–100) |
+
+### Python Example
+
+```python
+resp = requests.post("http://localhost:11540/v1/vision/classify", json={
+    "image": image_b64,
+    "model": "clip-vit-base",
+    "classes": ["defective product", "good product", "packaging damage"],
+    "top_k": 3
+})
+
+result = resp.json()
+print(f"Classification: {result['class_name']} ({result['confidence']:.2%})")
+```
+
+---
+
+## Cascade Streaming
+
+Cascade streaming processes frames through a chain of models, escalating to more powerful (or remote) models when confidence is low. This is ideal for real-time monitoring where you want fast inference most of the time but accuracy on difficult frames.
+
+### Start a Session
+
+```bash
+curl -X POST http://localhost:11540/v1/vision/stream/start \
+  -H "Content-Type: application/json" \
+  -d '{
+    "config": {
+      "chain": ["yolov8n", "yolov8m"],
+      "confidence_threshold": 0.7
+    },
+    "target_fps": 1.0,
+    "action_classes": ["person", "vehicle"],
+    "cooldown_seconds": 5.0
+  }'
+```
+
+Response:
+```json
+{"session_id": "a1b2c3d4"}
+```
+
+### Process Frames
+
+```bash
+curl -X POST http://localhost:11540/v1/vision/stream/frame \
+  -H "Content-Type: application/json" \
+  -d '{
+    "session_id": "a1b2c3d4",
+    "image": "'$IMAGE'"
+  }'
+```
+
+Response (confident detection):
+```json
+{
+  "status": "action",
+  "detections": [
+    {"x1": 100, "y1": 50, "x2": 300, "y2": 400, "class_name": "person", "class_id": 0, "confidence": 0.85}
+  ],
+  "confidence": 0.85,
+  "resolved_by": "yolov8n"
+}
+```
+
+Response (escalated to larger model):
+```json
+{
+  "status": "escalated",
+  "detections": [...],
+  "confidence": 0.78,
+  "resolved_by": "yolov8m"
+}
+```
+
+Response (no confident detection):
+```json
+{"status": "ok"}
+```
+
+### Stop Session
+
+```bash
+curl -X POST http://localhost:11540/v1/vision/stream/stop \
+  -H "Content-Type: application/json" \
+  -d '{"session_id": "a1b2c3d4"}'
+```
+
+Response:
+```json
+{
+  "session_id": "a1b2c3d4",
+  "frames_processed": 150,
+  "actions_triggered": 12,
+  "escalations": 3,
+  "duration_seconds": 152.4
+}
+```
+
+### Cascade Configuration
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `chain` | string[] | `["yolov8n"]` | Models to try in order. Can include `remote:http://...` for remote models |
+| `confidence_threshold` | float | `0.7` | Minimum confidence before escalating to next model |
+| `target_fps` | float | `1.0` | Target frame processing rate |
+| `action_classes` | string[] | all | Filter detections to specific classes |
+| `cooldown_seconds` | float | `5.0` | Minimum seconds between action triggers |
+
+**TIP: Remote Cascade**
+You can include remote models in the chain for Atmosphere mesh integration:
+```json
+{"chain": ["yolov8n", "remote:http://gpu-server:11540/v1/vision/detect"]}
+```
+Remote hosts must be in the configured allowlist (SSRF protection).
+
+### Python Streaming Example
+
+```python
+
+BASE = "http://localhost:11540"
+
+# Start session
+session = requests.post(f"{BASE}/v1/vision/stream/start", json={
+    "config": {"chain": ["yolov8n", "yolov8m"], "confidence_threshold": 0.7},
+    "action_classes": ["person"],
+    "cooldown_seconds": 2.0
+}).json()
+
+sid = session["session_id"]
+
+# Process frames (e.g., from a camera)
+for frame_bytes in camera_frames():
+    image_b64 = base64.b64encode(frame_bytes).decode()
+    result = requests.post(f"{BASE}/v1/vision/stream/frame", json={
+        "session_id": sid,
+        "image": image_b64
+    }).json()
+
+    if result["status"] in ("action", "escalated"):
+        print(f"Detected: {result['detections']} (by {result['resolved_by']})")
+
+# Stop session
+stats = requests.post(f"{BASE}/v1/vision/stream/stop", json={"session_id": sid}).json()
+print(f"Processed {stats['frames_processed']} frames, {stats['actions_triggered']} actions")
+```
+
+---
+
+## Training
+
+Fine-tune detection or classification models on your own datasets.
+
+### Start Training
+
+```bash
+curl -X POST http://localhost:11540/v1/vision/train \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "my-detector",
+    "dataset": "/path/to/dataset",
+    "task": "detection",
+    "config": {
+      "epochs": 50,
+      "batch_size": 16,
+      "learning_rate": 0.001
+    },
+    "base_model": "yolov8n"
+  }'
+```
+
+Response:
+```json
+{
+  "job_id": "train-abc123",
+  "status": "running",
+  "progress": 0.0,
+  "metrics": null
+}
+```
+
+### Check Training Status
+
+```bash
+curl http://localhost:11540/v1/vision/train/train-abc123
+```
+
+Response:
+```json
+{
+  "job_id": "train-abc123",
+  "status": "running",
+  "progress": 0.65,
+  "current_epoch": 33,
+  "total_epochs": 50,
+  "metrics": {
+    "mAP50": 0.82,
+    "mAP50-95": 0.61,
+    "loss": 0.034
+  },
+  "error": null
+}
+```
+
+### Cancel Training
+
+```bash
+curl -X DELETE http://localhost:11540/v1/vision/train/train-abc123
+```
+
+### Training Parameters
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `model` | string | Yes | — | Name for the trained model |
+| `dataset` | string | Yes | — | Path to training dataset |
+| `task` | string | Yes | — | `detection` or `classification` |
+| `config.epochs` | int | No | `10` | Training epochs (1–1000) |
+| `config.batch_size` | int | No | `16` | Batch size (1–256) |
+| `config.learning_rate` | float | No | `0.001` | Learning rate |
+| `base_model` | string | No | — | Pre-trained model to fine-tune from |
+
+---
+
+## Model Management
+
+### List Models
+
+```bash
+curl http://localhost:11540/v1/vision/models
+```
+
+Response:
+```json
+{
+  "models": [
+    {
+      "name": "my-detector",
+      "source_model_id": "yolov8n",
+      "versions": 3,
+      "has_current": true,
+      "size_mb": 12.4
+    }
+  ],
+  "total": 1
+}
+```
+
+### Save a Model
+
+```bash
+curl -X POST "http://localhost:11540/v1/vision/models/save?model_id=yolov8n&name=production-detector"
+```
+
+### Load a Model
+
+```bash
+curl -X POST "http://localhost:11540/v1/vision/models/load?name=production-detector"
+```
+
+### Export Model
+
+Export models to optimized formats for deployment:
+
+```bash
+curl -X POST http://localhost:11540/v1/vision/models/export \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model_id": "my-detector",
+    "format": "onnx",
+    "quantization": "fp16"
+  }'
+```
+
+Response:
+```json
+{
+  "export_path": "/models/exports/my-detector.onnx",
+  "format": "onnx",
+  "size_mb": 6.2,
+  "export_time_seconds": 3.45
+}
+```
+
+**Export Formats:**
+
+| Format | Description | Best For |
+|--------|-------------|----------|
+| `onnx` | Open Neural Network Exchange | Cross-platform deployment |
+| `coreml` | Apple Core ML | iOS/macOS apps |
+| `tensorrt` | NVIDIA TensorRT | NVIDIA GPU inference |
+| `tflite` | TensorFlow Lite | Mobile/edge devices |
+| `openvino` | Intel OpenVINO | Intel hardware |
+
+**Quantization Options:**
+
+| Option | Description |
+|--------|-------------|
+| `fp32` | Full precision (largest, highest quality) |
+| `fp16` | Half precision (good balance) |
+| `int8` | 8-bit integer (smallest, fastest) |
+
+---
+
+## API Reference
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/v1/vision/detect` | POST | Detect objects with YOLO |
+| `/v1/vision/classify` | POST | Classify images with CLIP |
+| `/v1/vision/stream/start` | POST | Start cascade streaming session |
+| `/v1/vision/stream/frame` | POST | Process a frame in a session |
+| `/v1/vision/stream/stop` | POST | Stop a streaming session |
+| `/v1/vision/train` | POST | Start a training job |
+| `/v1/vision/train/{job_id}` | GET | Get training job status |
+| `/v1/vision/train/{job_id}` | DELETE | Cancel a training job |
+| `/v1/vision/models` | GET | List saved models |
+| `/v1/vision/models/save` | POST | Save a model |
+| `/v1/vision/models/load` | POST | Load a saved model |
+| `/v1/vision/models/export` | POST | Export to ONNX/CoreML/etc. |
+
+---
+
+## Next Steps
+
+- [Specialized ML Models](./specialized-ml.md) — OCR, document extraction, and more
+- [ML Addons](./ml-addons.md) — Time-series forecasting, drift detection, CatBoost
+- [Anomaly Detection Guide](./anomaly-detection.md) — Outlier detection for monitoring
 
 ---
 
