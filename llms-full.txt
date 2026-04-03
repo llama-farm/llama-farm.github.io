@@ -198,11 +198,7 @@ Ready to build? Start with the [Quickstart](./quickstart/index.md).
 
 Get LlamaFarm installed, ingest a dataset, and run your first RAG-powered chat in minutes.
 
-## 1. Prerequisites
-
-- [Ollama](https://ollama.com/download) — Local model runtime (or any OpenAI-compatible provider)
-
-## 2. Install LlamaFarm
+## 1. Install LlamaFarm
 
 ### Option A: Desktop App (Easiest)
 
@@ -215,7 +211,7 @@ Download the all-in-one desktop application:
 | **Linux (x86_64)**  | [⬇️ Download](https://github.com/llama-farm/llamafarm/releases/latest/download/LlamaFarm-desktop-app-linux-x86_64.AppImage) |
 | **Linux (arm64)**   | [⬇️ Download](https://github.com/llama-farm/llamafarm/releases/latest/download/LlamaFarm-desktop-app-linux-arm64.AppImage)  |
 
-The desktop app bundles everything you need—no additional installation required.
+The desktop app bundles everything you need—no additional installation required. Launch it and the built-in Designer will guide you through project setup with an onboarding wizard.
 
 ### Option B: CLI Installation
 
@@ -256,22 +252,7 @@ Verify installation:
 lf --help
 ```
 
-## 3. Configure Your Runtime (Ollama)
-
-For best RAG results with longer documents, increase the Ollama context window:
-
-1. Open the Ollama app
-2. Navigate to **Settings → Advanced**
-3. Adjust the context window size (recommended: 32K+ for documents)
-
-Pull a model if you haven't already:
-
-```bash
-ollama pull llama3.2
-ollama pull nomic-embed-text  # For embeddings
-```
-
-## 4. Create a Project
+## 2. Create a Project
 
 ```bash
 lf init my-project
@@ -280,7 +261,7 @@ cd my-project
 
 This creates `llamafarm.yaml` with default runtime, prompts, and RAG configuration.
 
-## 5. Start LlamaFarm
+## 3. Start LlamaFarm
 
 ```bash
 lf start
@@ -294,10 +275,20 @@ This command:
 
 Hit `Ctrl+C` to exit the chat UI when you're done.
 
-**TIP: Use the Designer Web UI**
-Prefer a visual interface? Open `http://localhost:14345` in your browser to access the Designer—manage projects, upload datasets, configure models, and test prompts without touching the command line.
+### Use the Designer Web UI
 
-See the [Designer documentation](../designer/index.md) for details.
+Open `http://localhost:14345` in your browser to access the **Designer** — a visual interface for managing your entire project without touching the command line.
+
+When you open a new project in the Designer, the **onboarding wizard** walks you through setup step by step:
+
+1. **What are you building?** — Describe your project's purpose
+2. **Pick a model** — Choose from available local models or connect an API
+3. **Add data** — Upload documents for RAG or skip for later
+4. **Test it out** — Send your first message and see it work
+
+The wizard generates your `llamafarm.yaml` configuration automatically. After setup, you get full access to the [Dashboard](../designer/dashboard.md), [Prompts editor](../designer/prompts.md), [Data management](../designer/data-management.md), [RAG configuration](../designer/databases.md), [Model settings](../designer/models.md), and [Test interface](../designer/chat-and-testing.md).
+
+See the [Designer documentation](../designer/index.md) for the full guide.
 
 ### Running Services Manually
 
@@ -318,7 +309,7 @@ nx start server           # Terminal 1
 nx start universal-runtime # Terminal 2
 ```
 
-## 6. Chat with Your Project
+## 4. Chat with Your Project
 
 ```bash
 # Interactive chat (opens TUI)
@@ -334,7 +325,7 @@ Useful options:
 - `--database`, `--retrieval-strategy` — Override RAG behavior
 - `--curl` — Print the equivalent curl command
 
-## 7. Create and Populate a Dataset
+## 5. Create and Populate a Dataset
 
 ```bash
 # Create a dataset
@@ -346,7 +337,7 @@ lf datasets upload research-notes ./examples/fda_rag/files/*.pdf
 # lf datasets upload research-notes ./examples/fda_rag/files/*.pdf --no-process
 ```
 
-## 8. Process Documents
+## 6. Process Documents
 
 ```bash
 lf datasets process research-notes    # Only needed if you skipped auto-processing
@@ -356,7 +347,7 @@ This sends documents through the RAG pipeline—parsing, chunking, embedding, an
 
 For large PDFs, processing may take a few minutes. The CLI shows progress indicators.
 
-## 9. Query with RAG
+## 7. Query with RAG
 
 ```bash
 lf rag query --database main_db "What are the key findings?"
@@ -369,7 +360,7 @@ Useful flags:
 - `--include-metadata` — Show document sources
 - `--include-score` — Show relevance scores
 
-## 10. Next Steps
+## 8. Next Steps
 
 - [Designer Web UI](../designer/index.md) — Visual interface for managing projects
 - [Configuration Guide](../configuration/index.md) — Deep dive into `llamafarm.yaml`
@@ -866,7 +857,7 @@ Every section includes a toggle to switch between Designer (visual) mode and Con
 
 This guide walks through each section of the Designer web UI, explaining what you can do and how to use the various features.
 
-## Projects
+## [Projects & Getting Started](./getting-started.md)
 
 The Projects section is your starting point in the Designer. From the home page, you can:
 
@@ -890,12 +881,9 @@ Click on any project card on the home page to switch to that project. Your curre
 
 From any project page, click the project name dropdown in the header and select "Edit project" to update the project brief or rename the project.
 
-## Dashboard
+## [Dashboard](./dashboard.md)
 
 The Dashboard provides an at-a-glance view of your active project.
-
-![Designer Dashboard](./screenshots/dashboard.png)
-*The Dashboard showing project overview and key metrics*
 
 ### What You'll See
 
@@ -908,12 +896,9 @@ The Dashboard provides an at-a-glance view of your active project.
 
 The Dashboard is read-only and designed for quick reference. Use the action buttons to jump directly to relevant sections when you need to make changes.
 
-## Data Management
+## [Data Management](./data-management.md)
 
 The Data section is where you manage datasets and configure how files are processed.
-
-![Data Management Interface](./screenshots/data-management.png)
-*Managing datasets and processing strategies*
 
 ### Processing Strategies
 
@@ -959,7 +944,7 @@ Toggle to Config Editor mode to see the raw YAML configuration for datasets and 
 - Making bulk changes
 - Understanding the underlying structure
 
-## Models
+## [Models](./models.md)
 
 The Models section lets you configure which AI models your project uses.
 
@@ -990,12 +975,9 @@ Adjust runtime behavior:
 
 Use the "Test Connection" button to verify your model configuration works before saving.
 
-## Databases (RAG Configuration)
+## [Databases (RAG Configuration)](./databases.md)
 
 The Databases section is where you configure Retrieval-Augmented Generation.
-
-![RAG Configuration](./screenshots/rag-config.png)
-*Configuring vector databases and retrieval strategies*
 
 ### Vector Databases
 
@@ -1030,7 +1012,7 @@ Use the built-in query tester to:
 3. Verify relevance and ranking
 4. Adjust retrieval parameters if needed
 
-## Prompts
+## [Prompts](./prompts.md)
 
 The Prompts section helps you design and test system prompts.
 
@@ -1064,7 +1046,7 @@ Browse example prompts for common use cases:
 - Code generation
 - Data extraction
 
-## Chat Interface
+## [Chat & Testing](./chat-and-testing.md)
 
 The Chat section provides an interactive way to test your AI project.
 
@@ -1100,7 +1082,7 @@ The chat interface shows:
 
 Use this information to tune your RAG configuration for better results.
 
-## Config Editor
+## [Config Editor](./config-editor.md)
 
 Every section in the Designer includes a toggle between Designer mode (visual) and Config Editor mode (raw YAML).
 
@@ -15870,6 +15852,810 @@ The Designer is served by the same FastAPI server, so it shares port 14345 with 
 
 ---
 
+# Addons
+
+![Addons](./screenshots/addons.png)
+
+Addons extend LlamaFarm with additional ML capabilities. The Addons page lets you browse, install, and manage them.
+
+## Overview
+
+Addons are optional packages that add features like speech-to-text, text-to-speech, vision models, and more. They're managed separately because they can be large downloads and not every project needs them.
+
+## Browsing Addons
+
+The Addons page shows two sections:
+
+- **Installed** — addons currently on your system, with uninstall option
+- **Available** — addons you can install
+
+Use the search bar to filter by name or description.
+
+## Installing Addons
+
+1. Click an available addon to open the install side pane
+2. Review the addon details (description, size, dependencies)
+3. Click **Install**
+4. Watch the installation progress with real-time status updates
+
+### Install Progress
+
+The install progress component shows:
+
+- Current step (downloading, extracting, configuring)
+- Progress percentage
+- Estimated time remaining
+- Option to minimize to a floating indicator while you continue working
+
+### Dependency Handling
+
+Some addons depend on others. When uninstalling an addon that other addons depend on, you'll see a warning listing the affected addons.
+
+## API Routes
+
+| Action | Method | Route |
+|---|---|---|
+| List addons | GET | `/v1/addons` |
+| Install addon | POST | `/v1/addons/install` |
+| Uninstall addon | POST | `/v1/addons/uninstall` |
+| Task status | GET | `/v1/addons/tasks/{task_id}` |
+
+## Route
+
+```
+/addons
+```
+
+---
+
+# Chat & Testing
+
+![Test Interface](./screenshots/test-interface.png)
+
+The Test page is the Designer's multi-purpose testing interface. It supports several model types and includes a built-in DevTools panel for debugging.
+
+## Model Types
+
+The Test page supports switching between different model types via a selector:
+
+| Mode | What it tests |
+|---|---|
+| **Inference** | Standard chat with your configured LLM + optional RAG |
+| **Anomaly** | Score inputs against trained anomaly detection models |
+| **Classifier** | Classify text using trained classifier models |
+| **Document Scanning** | OCR and document analysis |
+| **Encoder** | Test embedding models and reranking |
+| **Speech** | Voice interaction (see [Speech](./speech.md)) |
+
+## Chat (Inference Mode)
+
+The primary chat interface for testing your AI project:
+
+- **Streaming responses** — see tokens appear in real-time
+- **RAG toggle** — enable/disable document retrieval
+- **Source references** — see which documents were retrieved and their relevance scores
+- **Markdown rendering** — responses render with full markdown support (tables, code blocks, etc.)
+- **Voice input** — click the mic button to speak instead of type
+- **Show prompts** — toggle to see the full prompt sent to the model
+- **Show thinking** — toggle to see chain-of-thought reasoning (if supported)
+
+### Session Management
+
+- Chat history persists between visits
+- Clear chat to start fresh
+- Sessions are per-project
+
+## DevTools Panel
+
+The DevTools drawer shows the raw API requests and responses for every interaction — invaluable for debugging and for building integrations.
+
+### Request Tab
+
+See the exact HTTP request sent to the server:
+
+- Method, URL, headers
+- Request body (JSON)
+- Timestamp and duration
+
+### Response Tab
+
+See the full server response:
+
+- Status code
+- Response body
+- Token usage (if available)
+
+### Code Snippets
+
+The DevTools automatically generate **code snippets** for replicating the request in:
+
+- cURL
+- Python (requests)
+- JavaScript (fetch)
+- And more
+
+Copy and paste these into your application to replicate exactly what the Designer did.
+
+### WebSocket Monitoring
+
+For streaming responses, DevTools also tracks WebSocket connections with message-by-message logging.
+
+### Usage
+
+- The DevTools panel appears as a **collapsed bar** at the bottom of the Test page
+- Click to expand into a full panel
+- Click outside or press **Escape** to collapse
+- **Clear history** to reset captured requests
+
+## Document Scanning Mode
+
+Test OCR and document analysis:
+
+- Select a scanning backend
+- Choose language
+- Upload or paste document images
+- View extracted text and structure
+
+## Encoder Mode
+
+Test embedding and reranking models:
+
+- **Embeddings** — enter text and see the vector output, test with common embedding models
+- **Reranking** — provide a query and documents, see reranked results with scores
+
+Sample inputs are provided for both to get started quickly.
+
+## API Routes
+
+| Action | Method | Route |
+|---|---|---|
+| Chat completion | POST | `/v1/projects/{ns}/{project}/chat/completions` |
+| Chat (streaming) | POST | `/v1/projects/{ns}/{project}/chat/completions` (SSE) |
+| Extract document | POST | `/v1/vision/documents/extract` |
+| Create embeddings | POST | `/v1/nlp/embeddings` |
+| Rerank documents | POST | `/v1/nlp/rerank` |
+
+## Route
+
+```
+/chat/test
+```
+
+---
+
+# Config Editor
+
+![Config Editor](./screenshots/config-editor.png)
+
+Every section in the Designer includes a toggle to switch between **Designer mode** (visual) and **Config Editor mode** (raw YAML). Look for the toggle button in the top-right corner.
+
+## When to Use Config Editor
+
+- Making precise changes to deeply nested configuration
+- Copying configuration between projects
+- Bulk editing (e.g., updating all chunk sizes at once)
+- Learning the underlying YAML structure
+- Troubleshooting validation errors that aren't obvious in visual mode
+
+## Editor Features
+
+The editor is powered by CodeMirror 6 and includes:
+
+| Feature | Description |
+|---|---|
+| **Syntax highlighting** | YAML-aware with schema support |
+| **Real-time validation** | Errors highlighted as you type |
+| **Auto-completion** | Suggestions based on the LlamaFarm schema |
+| **Search and replace** | Find and modify across the entire config |
+| **Line numbers** | Easy navigation in large files |
+| **Auto-formatting** | Correct indentation and YAML syntax |
+
+## Validation
+
+Changes are validated against the LlamaFarm schema in real-time:
+
+- Red underlines indicate errors
+- Hover over errors for explanations
+- Changes won't save until validation passes
+
+## Switching Modes
+
+Your position in the configuration is preserved when switching between Designer and Config Editor modes. Changes made in either mode are reflected in the other.
+
+## Tips
+
+- **New users**: Start in Designer mode to discover available options, then switch to Config Editor to understand the structure
+- **Advanced users**: Config Editor is faster for repetitive changes — copy/paste between projects
+- **Debugging**: If something isn't working, check Config Editor for validation errors that might not be visible in Designer mode
+
+---
+
+# Dashboard
+
+The Dashboard is your project's home base — an at-a-glance view of your active project's configuration, data, and status.
+
+## What You'll See
+
+- **Project configuration summary** — runtime provider, model, enabled features
+- **Dataset statistics** — number of datasets, total files, processing status
+- **Quick actions** — common tasks like creating datasets, editing prompts, or opening chat
+- **Getting Started Checklist** — personalized setup guide (see [Getting Started](./getting-started.md))
+
+## Service Status
+
+The header includes a **Service Status** indicator that shows the health of all connected services:
+
+| Status | Meaning |
+|---|---|
+| 🟢 **Healthy** | All services operational |
+| 🟡 **Degraded** | Some services need attention |
+| 🔴 **Unhealthy** | Service issues detected |
+
+Click the status indicator to see detailed health for each service (server, RAG worker, Universal Runtime, etc.) with specific status messages and links to documentation.
+
+## Upgrade Banners
+
+When a new version of LlamaFarm is available, a banner appears at the top of the page with the version number and a link to view details and upgrade. Banners can be dismissed per-context (home page vs. project page) and auto-dismiss after a successful upgrade.
+
+## Route
+
+```
+/chat/dashboard
+```
+
+---
+
+# Data Management
+
+The Data section is where you manage datasets, configure processing strategies, and preview how your documents will be chunked and embedded.
+
+## Processing Strategies
+
+Processing strategies define how uploaded files are parsed, chunked, and embedded. Each strategy includes:
+
+- **Parsers** — how to extract text from different file types (PDF, DOCX, TXT, CSV, Markdown)
+- **Extractors** — additional extraction settings (metadata, patterns, custom schemas)
+- **Chunking** — how to split documents into pieces (by characters, sentences, or paragraphs)
+- **Embedding** — which model creates vector embeddings
+- **Storage** — which vector database stores the results
+
+### Managing Strategies
+
+- **View existing strategies** — see all configured strategies as cards
+- **Create new** — define a strategy from scratch
+- **Copy** — duplicate an existing strategy as a starting point
+- **Edit** — click any strategy card to modify its configuration
+
+### Extractor & Parser Settings
+
+The extractor settings form lets you configure:
+
+- Extraction patterns with a visual pattern editor
+- Custom extraction schemas
+- Metadata extraction rules
+
+Parser settings control file-type-specific behavior like PDF table extraction, CSV delimiter handling, and markdown header parsing.
+
+## Datasets
+
+Below the strategies, you'll find your datasets:
+
+- **Create dataset** — name it, select a processing strategy and database
+- **Upload files** — drag and drop or click to browse
+- **Process** — kick off ingestion after uploading
+- **View details** — click a dataset to see files, metadata, and processing status
+- **Delete** — remove a dataset via the dropdown menu
+
+### Supported File Types
+
+| Format | Extensions |
+|---|---|
+| PDF | `.pdf` |
+| Word | `.docx` |
+| Text | `.txt` |
+| CSV | `.csv` |
+| Markdown | `.md`, `.markdown` |
+
+## Document Preview
+
+After processing, you can preview how any document was chunked using the **Document Preview** modal.
+
+![Document Preview](./screenshots/document-preview.png)
+
+The preview shows two side-by-side panels:
+
+- **Original Document** — the source file as-is
+- **Processed Chunks** — how the document was split, with chunk boundaries highlighted
+
+You can:
+
+- Switch between different processing strategies to compare results
+- Click individual chunks to see their content and metadata
+- Verify that chunking boundaries make sense for your use case
+
+### API Routes
+
+| Action | Method | Route |
+|---|---|---|
+| List datasets | GET | `/v1/projects/{ns}/{project}/datasets` |
+| Create dataset | POST | `/v1/projects/{ns}/{project}/datasets` |
+| Upload files | POST | `/v1/projects/{ns}/{project}/datasets/{dataset}/data` |
+| Process dataset | POST | `/v1/projects/{ns}/{project}/datasets/{dataset}/actions` |
+| Preview document | POST | `/v1/projects/{ns}/{project}/rag/databases/{database_name}/preview` |
+
+## Route
+
+```
+/chat/data
+/chat/data/:datasetId
+```
+
+---
+
+# Databases (RAG Configuration)
+
+![RAG Configuration](./screenshots/rag-config.png)
+
+The Databases section is where you configure Retrieval-Augmented Generation — vector databases, embedding models, and retrieval strategies.
+
+## Vector Databases
+
+Create and manage vector databases:
+
+- **ChromaDB** (default) — local vector storage, zero configuration
+- **Pinecone**, **Weaviate**, etc. — cloud-hosted options
+
+Each database needs a unique name and storage configuration (connection details for hosted options).
+
+## Embedding Strategies
+
+Configure how text is converted to vectors:
+
+| Setting | Description |
+|---|---|
+| **Embedding model** | Which model creates embeddings (e.g., `nomic-embed-text`) |
+| **Chunk size** | How large each embedded piece should be |
+| **Overlap** | How much chunks overlap to preserve context |
+
+### Changing Embedding Models
+
+The **Change Embedding Model** page lets you switch models for a database. This will re-embed all documents, which can take time for large datasets.
+
+### Adding Embedding Strategies
+
+Create new embedding strategies with custom chunk sizes, overlap, and model selection. Local models are shown in a table with download status.
+
+## Retrieval Strategies
+
+Define how relevant documents are found when querying:
+
+| Method | Description |
+|---|---|
+| **Similarity Search** | Pure vector similarity (default) |
+| **Hybrid Search** | Combines vector + keyword matching (BM25) |
+| **MMR** | Maximal Marginal Relevance — balances relevance with diversity |
+| **Metadata Filtering** | Filter by document properties before similarity search |
+
+### Managing Strategies
+
+- **Add** — create a new retrieval strategy
+- **Edit** — modify parameters like top-k, score threshold, or filters
+- **View** — see the full strategy configuration
+
+### Testing Queries
+
+Use the built-in query tester to:
+
+1. Enter a test question
+2. See which documents are retrieved
+3. Check relevance scores and ranking
+4. Adjust parameters if needed
+
+## API Routes
+
+| Action | Method | Route |
+|---|---|---|
+| List databases | GET | `/v1/projects/{ns}/{project}/rag/databases` |
+| Create database | POST | `/v1/projects/{ns}/{project}/rag/databases` |
+| RAG query | POST | `/v1/projects/{ns}/{project}/rag/query` |
+| RAG health | GET | `/v1/projects/{ns}/{project}/rag/health` |
+
+## Route
+
+```
+/chat/databases
+/chat/databases/add-embedding
+/chat/databases/add-retrieval
+/chat/rag/:strategyId/change-embedding
+/chat/rag/:strategyId/retrieval
+```
+
+---
+
+# Getting Started
+
+![Onboarding Wizard](./screenshots/onboarding-wizard.png)
+
+When you open a project for the first time, the Designer walks you through an onboarding wizard that builds a personalized getting-started checklist based on your goals.
+
+## Onboarding Wizard
+
+The wizard asks four quick questions to understand what you're building:
+
+### Step 1: Project Type
+
+Choose what kind of AI project you're building:
+
+| Type | Description |
+|---|---|
+| **Chat with documents** | Customer support bots, knowledge bases, FAQ assistants |
+| **Classify text** | Sentiment analysis, ticket routing, content categorization |
+| **Detect anomalies** | Fraud detection, system monitoring, quality control |
+| **Summarize documents** | Report generation, meeting notes, research digests |
+| **Just exploring** | Not sure yet — see what's possible |
+
+### Step 2: Data Status
+
+Tell the wizard about your data:
+
+- **Use sample data** — pick from built-in demo datasets matched to your project type
+- **I have my own data** — upload files directly in the wizard (drag-and-drop supported)
+- **No data yet** — skip for now, add data later
+
+When uploading your own data, you can name your dataset and add multiple files right in the wizard.
+
+### Step 3: Deploy Target
+
+Where will this run?
+
+- **On my own turf** — local machine, on-prem, or air-gapped
+- **Up in the cloud** — AWS, GCP, Azure
+- **Haven't decided yet** — no worries
+
+### Step 4: Experience Level
+
+How much guidance do you want?
+
+- **Hold my hand** — step-by-step walkthroughs
+- **Just nudge me along** — know the basics, need direction
+- **Get out of my way** — just the checklist
+
+### Completion
+
+After answering, the wizard generates a personalized checklist and transitions you to the dashboard. A brief loading animation shows while your guide is being built.
+
+You can skip the wizard at any time by pressing **Escape** or clicking the X button.
+
+## Getting Started Checklist
+
+After the wizard completes, a checklist appears at the top of the dashboard with steps tailored to your project type and experience level.
+
+### How it works
+
+- Each step has a checkbox, title, and a link to the relevant section
+- Clicking a step's link navigates you to the right page
+- Steps auto-complete when you finish the action (e.g., uploading data marks "Add data" complete)
+- You can manually check steps off too
+- Confetti fires when you complete a step 🎉
+- Collapse the checklist to a compact progress bar when you don't need it
+
+### Checklist Navigator
+
+When you navigate away from the dashboard via a checklist link, a floating navigator appears showing:
+
+- Which checklist step you're on
+- Progress through the overall checklist
+- Quick navigation back to the dashboard or to the next step
+- Contextual tips for the current page
+
+### Restarting the Wizard
+
+If you skipped or dismissed the wizard, a banner on the dashboard lets you restart it anytime. Click **"Set up my guide"** to re-run the wizard with fresh answers.
+
+---
+
+# ML Training
+
+![Classifier Training](./screenshots/classifier-training.png)
+
+The Designer includes built-in tools for training classifiers and anomaly detection models — no ML expertise required. These run on the Universal Runtime.
+
+## Text Classifiers
+
+Train a text classifier using SetFit (few-shot fine-tuning). Great for sentiment analysis, ticket routing, content categorization, and more.
+
+### How It Works
+
+1. **Choose a base model** — select an embedder model (default: `all-MiniLM-L6-v2`)
+2. **Add training data** — enter text/label pairs, or use a sample dataset
+3. **Train** — click Train and watch progress in real-time
+4. **Test** — enter text and see predictions with confidence scores
+
+### Available Base Models
+
+| Model | Dimensions | Notes |
+|---|---|---|
+| `all-MiniLM-L6-v2` | 384 | Default, fast, good general purpose |
+| `bge-small-en-v1.5` | 384 | Strong English performance |
+| `bge-base-en-v1.5` | 768 | Larger, more accurate |
+| `bge-large-en-v1.5` | 1024 | Best accuracy, slower |
+| `bge-m3` | 1024 | Multilingual support |
+| `e5-base-v2` | 768 | Good for retrieval tasks |
+| `e5-large-v2` | 1024 | Larger variant |
+
+### Sample Datasets
+
+Built-in sample datasets to get started quickly:
+
+- **Sentiment analysis** — 3 classes, 200 examples (positive/negative/neutral)
+- Additional domain-specific samples available
+
+### Managing Trained Models
+
+The **Trained Models** view lists all your classifier models with:
+
+- Model name and version
+- Training timestamp
+- Number of classes and examples
+- Actions: load, test, delete
+
+## Anomaly Detection
+
+Train anomaly detection models using PyOD backends. Useful for fraud detection, system monitoring, quality control, and any scenario where you need to identify outliers.
+
+### Backends
+
+12 PyOD backends organized by category:
+
+| Category | Backends | Best for |
+|---|---|---|
+| **Fast (Recommended)** | ECOD, HBOS, COPOD | General purpose, parameter-free |
+| **Legacy (Well-Tested)** | Isolation Forest, LOF, KNN, OCSVM | Traditional ML approaches |
+| **Deep Learning** | AutoEncoder, VAE | Complex patterns |
+| **Ensemble** | SUOD, LSCP | Combining multiple detectors |
+
+### Training Flow
+
+1. **Select a backend** — ECOD recommended for most cases
+2. **Configure features** — define feature columns with encoding types and normalization
+3. **Add training data** — paste text/CSV or use table input mode
+4. **Set threshold** — contamination ratio (default varies by backend)
+5. **Train** — model trains and shows results
+
+### Feature Configuration
+
+Each feature column supports:
+
+- **Encoding types** — numeric, one-hot, label, ordinal, binary, frequency
+- **Normalization** — standard, min-max, robust, none
+
+### Streaming Anomaly Detection
+
+For real-time monitoring, the streaming mode provides:
+
+- **Mode toggle** — switch between batch and streaming detection
+- **Status panel** — connection status, events processed, anomalies detected
+- **Results chart** — live visualization of anomaly scores over time
+- **Mode panel** — configure streaming parameters
+
+### API Routes
+
+| Action | Method | Route |
+|---|---|---|
+| Train classifier | POST | `/v1/ml/classifier/fit` |
+| Predict (classifier) | POST | `/v1/ml/classifier/predict` |
+| List classifier models | GET | `/v1/ml/classifier/models` |
+| Train anomaly model | POST | `/v1/ml/anomaly/fit` |
+| Score anomaly | POST | `/v1/ml/anomaly/score` |
+| List anomaly models | GET | `/v1/ml/anomaly/models` |
+
+## Route
+
+```
+/chat/models/train/classifier/new
+/chat/models/train/classifier/:id
+/chat/models/train/anomaly/new
+/chat/models/train/anomaly/:id
+```
+
+---
+
+# Models
+
+![Models](./screenshots/models.png)
+
+The Models section lets you configure which AI models your project uses for inference, manage locally downloaded models, and connect to cloud providers.
+
+## Runtime Providers
+
+Select your runtime provider:
+
+| Provider | Description |
+|---|---|
+| **Ollama** | Local models on your machine (default) |
+| **OpenAI** | GPT models via API key |
+| **OpenAI-compatible** | Custom endpoints (vLLM, LM Studio, etc.) |
+
+## Cloud Models
+
+For cloud providers (OpenAI, compatible endpoints), configure:
+
+- **API key** — your provider credentials
+- **Base URL** — custom endpoint URL (for compatible providers)
+- **Model selection** — choose from available models
+
+## Model Parameters
+
+Fine-tune model behavior:
+
+| Parameter | What it does |
+|---|---|
+| **Temperature** | Randomness (0.0 = deterministic, 1.0+ = creative) |
+| **Max Tokens** | Maximum response length |
+| **Top P** | Nucleus sampling threshold |
+| **Frequency Penalty** | Discourage repetition |
+| **Presence Penalty** | Encourage topic diversity |
+
+## Device Models (Local)
+
+The Device Models section manages models downloaded to your local machine.
+
+### Features
+
+- **Browse downloaded models** — see all models on disk with size and metadata
+- **Search and filter** — find models by name
+- **Use a model** — one-click to set as the active model for your project
+- **Delete models** — remove from disk to free space
+- **Disk space monitoring** — warnings when disk space is low, errors when insufficient
+
+### Downloading Models
+
+Click **"Add models"** to browse and download new models. The download dialog shows:
+
+- Model name and description
+- File size and quantization level
+- Download progress
+- Custom download option for models from Hugging Face or other sources
+
+### Disk Space Dialogs
+
+- **Warning** — shown when disk space is getting low (you can proceed)
+- **Error** — shown when there's not enough space to download (must free space first)
+
+## Prompt Set Selector
+
+From the Models page, you can also select which **prompt set** to use with the configured model. This links to the [Prompts](./prompts.md) configuration.
+
+## Adding Inference Models
+
+The **Add Inference Models** page (`/chat/models/add`) lets you:
+
+- Browse available models from your provider
+- Pull/download models
+- Configure custom model endpoints
+- Test model connections before saving
+
+## Route
+
+```
+/chat/models
+/chat/models/add
+```
+
+---
+
+# Prompts
+
+![Prompts](./screenshots/prompts.png)
+
+The Prompts section helps you design, organize, and test system prompts for your AI project.
+
+## Creating Prompts
+
+1. Click **"Add Prompt"** to create a new template
+2. Give it a descriptive name
+3. Write your system prompt — supports variables like `{context}` and `{question}`
+4. Add optional user message templates
+
+## Prompt Sets
+
+Organize related prompts into sets:
+
+- **Default prompts** — always included in every request
+- **Conditional prompts** — applied based on context
+- **Specialized prompts** — for different tasks (summarization, extraction, etc.)
+
+The **Prompt Set Selector** (also accessible from the [Models](./models.md) page) lets you switch between prompt sets quickly.
+
+## Testing Prompts
+
+Use the test panel to:
+
+- Enter sample inputs and see the rendered prompt with variables filled in
+- Get actual model responses
+- Compare multiple prompt versions side-by-side
+- Iterate quickly without leaving the page
+
+## Config Editor Mode
+
+Toggle to Config Editor mode to see and edit prompts as raw YAML. Useful for copying prompts between projects or making bulk edits.
+
+## Route
+
+```
+/chat/prompt
+```
+
+---
+
+# Samples & Demos
+
+LlamaFarm includes pre-built sample projects and guided demos to help you get started quickly and learn how different features work together.
+
+## Sample Projects
+
+The Samples page shows a gallery of ready-made projects you can import.
+
+### Available Samples
+
+Each sample card shows:
+
+- **Title and description** — what the project does
+- **Primary model** — which LLM it's configured for
+- **Tags** — categorization (maintenance, fleet, ops, etc.)
+- **Download size** — how much data to fetch
+- **Dataset count** — number of included datasets
+
+### Importing a Sample
+
+Click a sample card to preview it, then choose:
+
+- **Import as project** — creates a new project with the sample's full configuration, prompts, and strategies. You can customize the name and description.
+- **Import data only** — imports just the datasets into an existing project. Choose whether to create a new dataset or add to an existing one, and whether to include processing strategies.
+
+### Example Projects
+
+| Project | Description | Model |
+|---|---|---|
+| Aircraft Maintenance Assistant | Fault diagnosis from offline manuals and flight logs | TinyLlama |
+| *(and more)* | Browse the full gallery in the Designer | Various |
+
+## Guided Demos
+
+![Demo Modal](./screenshots/demo-modal.png)
+
+Demos are interactive walkthroughs that create a working project step-by-step, showing you the API calls happening in real-time.
+
+### How Demos Work
+
+1. Click **"Try a demo"** (available from the home page)
+2. Select a demo from the gallery — each shows description, category, estimated time, and file count
+3. Watch as the demo:
+   - Creates a project
+   - Uploads sample files
+   - Configures processing strategies
+   - Processes data
+   - Shows each API call with expandable request/response details
+4. When complete, you have a fully working project to explore
+
+### Available Demos
+
+Demos are organized by category and matched to project types. Each demo includes:
+
+- Pre-configured `llamafarm.yaml`
+- Sample data files
+- Sample questions to try after setup
+
+Demos can also link directly to model training pages (classifier, anomaly) with sample data pre-loaded.
+
+## Route
+
+```
+/samples
+```
+
+---
+
 # Designer Screenshots
 
 This directory contains screenshots for the Designer documentation.
@@ -15930,6 +16716,173 @@ If you want to highlight specific features, consider:
 - Adding brief text labels
 
 Keep annotations minimal and professional.
+
+---
+
+# Speech
+
+![Speech Panel](./screenshots/speech-panel.png)
+
+The Speech panel provides speech-to-text (STT), text-to-speech (TTS), voice cloning, and full voice conversation capabilities. These features require the speech addons to be installed (see [Addons](./addons.md)).
+
+## Speech-to-Text (STT)
+
+Record audio and get transcriptions:
+
+- **Model selection** — choose from available Whisper models (base, small, medium, large)
+- **Language** — set the source language for better accuracy
+- **Word timestamps** — optionally get per-word timing data
+- **Live waveform** — visualize audio input in real-time
+
+### Recording
+
+Click the microphone button to start recording. The waveform visualization shows audio levels in real-time. Click stop when done, and the transcription appears below.
+
+If microphone access hasn't been granted, a permission prompt guides you through enabling it.
+
+## Text-to-Speech (TTS)
+
+Convert text to spoken audio:
+
+- **Model selection** — choose from available TTS models (e.g., `pocket-tts`)
+- **Voice selection** — pick from available voices for the selected model
+- **Audio playback** — listen to generated audio with built-in player
+- **History** — previous TTS generations are kept for reference
+
+## Voice Cloning
+
+Create custom voices from audio samples:
+
+- Record or upload a voice sample
+- Clone the voice for use with TTS
+- Use cloned voices in conversation mode
+
+## Conversation Mode
+
+Full voice-to-voice conversation with your AI:
+
+- **Turn detection** — configurable settings for when the AI should start responding
+- **Continuous conversation** — alternating speech turns with the AI
+- **Conversation view** — see the full transcript with speaker labels
+- **Model integration** — uses your project's configured inference model for responses
+
+### Turn Detection Settings
+
+Configure how the system detects when you've stopped talking:
+
+- Silence threshold
+- Minimum speech duration
+- Response delay
+
+## Requirements
+
+Speech features require the **Universal Runtime** (port 11540) to be running. The panel checks runtime health automatically and shows status badges for STT/TTS availability.
+
+If addons aren't installed, an inline prompt lets you install them directly or navigate to the [Addons](./addons.md) page.
+
+## API Routes
+
+| Action | Method | Route |
+|---|---|---|
+| Transcribe audio | POST | `/v1/audio/transcriptions` (Universal Runtime) |
+| Synthesize speech | POST | `/v1/{ns}/{project}/audio/speech` |
+| List voices | GET | `/v1/{ns}/{project}/audio/voices` |
+| Stream transcription | WebSocket | `/v1/audio/transcriptions/stream` (Universal Runtime) |
+
+## Route
+
+Speech is accessed through the Test page in speech mode:
+
+```
+/chat/test (select Speech mode)
+```
+
+---
+
+# Vision
+
+![Vision Panel](./screenshots/vision-panel.png)
+
+The Vision panel provides OCR, image analysis, object detection with bounding boxes, model training, and real-time streaming detection.
+
+## Tabs
+
+The Vision panel has five sub-sections accessible via a left sidebar:
+
+### Analyze
+
+Upload and analyze images:
+
+- Drag-and-drop or click to upload images
+- Run OCR to extract text from images
+- Get image descriptions and analysis
+- View results alongside the original image
+
+### Train
+
+Train custom vision models:
+
+- Upload training images with annotations
+- Draw bounding boxes on images using the interactive canvas
+- Define object classes
+- Configure training parameters
+- Monitor training progress
+
+### Models
+
+Manage saved vision models:
+
+- View all trained models
+- Load a model for inference
+- Delete models you no longer need
+- Navigate to training to create new models
+
+### Stream
+
+Real-time detection using a trained model:
+
+- Connect to a video feed or webcam
+- Run continuous object detection
+- See bounding boxes overlaid in real-time
+- Monitor detection confidence scores
+
+### Review
+
+Review detection results:
+
+- Browse past detection runs
+- Verify accuracy of detections
+- Filter by confidence threshold
+- Export results
+
+## Bounding Box Canvas
+
+The interactive canvas component supports:
+
+- Drawing new bounding boxes by click-and-drag
+- Resizing existing boxes
+- Labeling boxes with class names
+- Zooming and panning on large images
+- Undo/redo
+
+## API Routes
+
+| Action | Method | Route |
+|---|---|---|
+| Detect objects | POST | `/v1/vision/detect` |
+| Classify image | POST | `/v1/vision/classify` |
+| Detect + Classify | POST | `/v1/vision/detect_classify` |
+| OCR | POST | `/v1/vision/ocr` |
+| Train model | POST | `/v1/vision/train` |
+| List models | GET | `/v1/vision/models` |
+
+## Route
+
+Vision is accessed through the Test page in vision mode:
+
+```
+/chat/test (select Vision mode)
+```
 
 ---
 
